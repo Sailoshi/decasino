@@ -35,7 +35,6 @@ export class SlotElement {
     this._cube.getComponent(Transform).scale.set(0.1, 0.1, 0.01)
     const that = this;
 
-
     const move = new utils.MoveTransformComponent(this._startPos, this._endPosition, 0.2, function() {
       that._cube.addComponent(new utils.ExpireIn(10))
       // let testElement = new SlotElement(new Vector3(2, 1, 2), new Vector3(2, 3, 2));
@@ -95,8 +94,13 @@ input.subscribe("BUTTON_DOWN", ActionButton.POINTER, false, e => {
   // testElement2.Move();
   // testElement3.Move();
   // testElement4.Move();
-  startRound = true;
 
+    cube.getComponent(LerpData).startGame = true;
+    cube1.getComponent(LerpData).startGame = true;
+    cube2.getComponent(LerpData).startGame = true;
+    cube3.getComponent(LerpData).startGame = true;
+    cube4.getComponent(LerpData).startGame = true;
+    cube5.getComponent(LerpData).startGame = true;
 })
 
 let testElement = new SlotElement(new Vector3(2, 2, 2), new Vector3(2, 1, 2));
@@ -145,8 +149,10 @@ export class SpinBlock {
 
 @Component("lerpData")
 export class LerpData implements ISystem {
+
     origin: Vector3 = Vector3.Zero()
     target: Vector3 = Vector3.Zero()
+    startGame: Boolean = false;
     fraction: number = 0
 }
 
@@ -157,26 +163,30 @@ export class LerpMove implements ISystem {
 
     constructor(cubeComponent: Entity){
         this._cube = cubeComponent
-        this._cube.getComponent(Transform).position.set(this._startPosition.x, this._startPosition.y, this._startPosition.z);
+        this._startPosition = this._cube.getComponent(Transform).position;
+        // this._cube.getComponent(Transform).position.set(this._startPosition.x, this._startPosition.y, this._startPosition.z);
         this._transform = this._cube.getComponent(Transform)
     }
 
-    private _speed = 1;
+    private _speed = 1.5;
     private _counter = 0;
     private _rounds = 1;
-    private _startPosition = new Vector3(0, 0.415,0);
+    private _startPosition;
+    private _delta = 0;
     // private _startPosition2 = new Vector3(0.5, 0.415,0);
     private _endPosition = new Vector3(0, 0.015,0);
 
     update(dt: number) {
-        if (startRound) {
+        let lerp = this._cube.getComponent(LerpData)
+
+        if (lerp.startGame) {
 
 
             // let lerp = this._cube.getComponent(LerpData)
             // if (lerp.fraction < 1) {
 
             if (this._transform.position.y > this._endPosition.y && this._counter < this._rounds) {
-
+                this._delta = 0;
                 // if (lerp.fraction > 0.01 && this._counter == 1) {
                     // this._speed = 40;
                 //}
@@ -184,9 +194,9 @@ export class LerpMove implements ISystem {
                     // this._speed = 40;
                 //}
 
-                if ( this._counter == 2) {
+                // if ( this._counter == 2) {
                     // this._speed = 60;
-                }
+                // }
 
                 // transform.position = Vector3.Lerp(
                 //     lerp.origin,
@@ -194,29 +204,32 @@ export class LerpMove implements ISystem {
                 //     lerp.fraction
                 // )
                 // lerp.fraction += (0.03 / 50) * this._speed;
-                this._transform.position = this._transform.position.add(new Vector3(0, -dt * this._speed, 0));
-            } else if (this._startPosition.y - this._transform.position.y  < 0.01 && this._rounds == this._counter) {
-                if  (this._transform.position.y - this._startPosition.y < dt* this._speed) {
+
+                this._transform.position = this._transform.position.add(new Vector3(0, (-dt) * this._speed, 0));
+
+            } else if (this._rounds == this._counter) {
+                if  (this._startPosition.y <= this._transform.position.y) {
+                    this._transform.position = this._transform.position.add(new Vector3(0, -dt * this._speed, 0));
+                } else {
                     this._transform.position.set(this._startPosition.x, this._startPosition.y, this._startPosition.z)
                     this._counter = 0;
-                    startRound = false;
-                } else {
-
-                    this._transform.position = this._transform.position.add(new Vector3(0, -dt * this._speed, 0));
+                    lerp.startGame = false;
                 }
+
             } else {
 
-                this._transform.position = this._transform.position.set(0, 0.515, 0);
+                if (this._counter < this._rounds) {
+                     this._delta = Math.abs(this._transform.position.y - this._endPosition.y) + dt * this._speed;
+                }
+                this._counter++;
+                this._transform.position = this._transform.position.set(0, 0.515 - this._delta, 0);
 
                 // this._cube.getComponent(LerpData).origin.set(0, 0.42, 0);
                 if (this._rounds == this._counter) {
 
-                    // this._speed = 10;
-                    //this._counter = 0;
-                    //this._transform.position = this._startPosition;
-                    //startRound = false;
+
                 }
-                this._counter++;
+
 
 
                 // lerp.fraction = 0;
@@ -261,10 +274,10 @@ cube.getComponent(Transform).scale.set(0.1, 0.1, 0.01)
 cube.addComponent(new BoxShape());
 cube.addComponent(new LerpData())
 cube.addComponent(myMaterialA)
-cube.getComponent(LerpData).origin = new Vector3(0, 0.52, 0)
+cube.getComponent(LerpData).origin = new Vector3(0, 0.5, 0)
 cube.getComponent(LerpData).target = new Vector3(0, 0, 0)
 
-// cube.setParent(slotMachineScreen)
+cube.setParent(slotMachineScreen)
 
 var cube1 = new Entity();
 cube1.addComponent(new Transform({ position: new Vector3(0, 0.415, 0) }))
@@ -286,7 +299,7 @@ cube2.addComponent(myMaterialC)
 cube2.getComponent(LerpData).origin = new Vector3(0, 0.315, 0)
 cube2.getComponent(LerpData).target = new Vector3(0, 0, 0)
 
-// cube2.setParent(slotMachineScreen)
+cube2.setParent(slotMachineScreen)
 
 var cube3 = new Entity();
 cube3.addComponent(new Transform({ position: new Vector3(0, 0.215, 0) }))
@@ -297,7 +310,7 @@ cube3.addComponent(myMaterialD)
 cube3.getComponent(LerpData).origin = new Vector3(0, 0.215, 0)
 cube3.getComponent(LerpData).target = new Vector3(0, 0, 0)
 
-// cube3.setParent(slotMachineScreen)
+cube3.setParent(slotMachineScreen)
 
 var cube4 = new Entity();
 cube4.addComponent(new Transform({ position: new Vector3(0, 0.115, 0) }))
@@ -308,10 +321,10 @@ cube4.addComponent(myMaterialE)
 cube4.getComponent(LerpData).origin = new Vector3(0, 0.115, 0)
 cube4.getComponent(LerpData).target = new Vector3(0, 0, 0)
 
-// cube4.setParent(slotMachineScreen)
+ cube4.setParent(slotMachineScreen)
 
 var cube5 = new Entity();
-cube5.addComponent(new Transform({ position: new Vector3(0, 0.015, 0) }))
+cube5.addComponent(new Transform({ position: new Vector3(1, 0.015, 0) }))
 cube5.getComponent(Transform).scale.set(0.1, 0.1, 0.01)
 cube5.addComponent(new BoxShape());
 cube5.addComponent(new LerpData())
@@ -330,12 +343,12 @@ cube5.getComponent(LerpData).target = new Vector3(0, 0, 0)
 
  engine.addEntity(slotMachineScreen);
 
-// engine.addSystem(new LerpMove(cube))
+engine.addSystem(new LerpMove(cube))
 engine.addSystem(new LerpMove(cube1))
- engine.addSystem(new LerpMove(cube2))
-// engine.addSystem(new LerpMove(cube3))
-// engine.addSystem(new LerpMove(cube4))
-// engine.addSystem(new LerpMove(cube5))
+engine.addSystem(new LerpMove(cube2))
+engine.addSystem(new LerpMove(cube3))
+engine.addSystem(new LerpMove(cube4))
+engine.addSystem(new LerpMove(cube5))
 
 
 
