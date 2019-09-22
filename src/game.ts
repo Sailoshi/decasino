@@ -147,8 +147,7 @@ export class SpinBlock {
 
 }
 
-
-const a = new Texture("materials/1.png")
+const a = new Texture("materials/1.png");
 const b = new Texture("materials/2.png")
 const c = new Texture("materials/3.png")
 const d = new Texture("materials/4.png")
@@ -157,6 +156,7 @@ const f = new Texture("materials/6.png")
 const g = new Texture("materials/7.png")
 const h = new Texture("materials/8.png")
 const i = new Texture("materials/9.png")
+
 
 const materialsArray: Array<Texture> = [a, b, c, d, e, f , g, h, i]
 
@@ -193,12 +193,6 @@ myMaterialD.texture = f
 // myMaterialD.metallic = 0.9
 // myMaterialD.roughness = 0.1
 
-var textBox = new Entity();
-textBox.addComponent(new BoxShape())
-textBox.addComponent(new Transform())
-
-textBox.addComponent(myMaterialA)
-engine.addEntity(textBox)
 
 
 @Component("lerpData")
