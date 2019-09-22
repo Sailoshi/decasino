@@ -119,7 +119,7 @@ let startRound = false;
 export class SlotMachineScreen {}
 
 let slotMachineScreen = new Entity();
-slotMachineScreen.addComponent(new Transform({position: new Vector3(1, 1.3, 1)}))
+slotMachineScreen.addComponent(new Transform({position: new Vector3(1, 1.4, 1)}))
 
 let topBlock = new Entity();
 topBlock.addComponent(new BoxShape());
@@ -147,12 +147,67 @@ export class SpinBlock {
 
 }
 
+
+const a = new Texture("materials/1.png")
+const b = new Texture("materials/2.png")
+const c = new Texture("materials/3.png")
+const d = new Texture("materials/4.png")
+const e = new Texture("materials/5.png")
+const f = new Texture("materials/6.png")
+const g = new Texture("materials/7.png")
+const h = new Texture("materials/8.png")
+const i = new Texture("materials/9.png")
+
+const materialsArray: Array<Texture> = [a, b, c, d, e, f , g, h, i]
+
+
+
+const myMaterialA = new BasicMaterial()
+
+myMaterialA.texture  = a
+// myMaterialA.metallic = 0.9
+// myMaterialA.roughness = 0.1
+
+const myMaterialB = new BasicMaterial()
+myMaterialB.texture = b
+// myMaterialB.metallic = 0.9
+// myMaterialB.roughness = 0.1
+
+const myMaterialC = new BasicMaterial()
+myMaterialC.texture = c
+// myMaterialC.metallic = 0.9
+// myMaterialC.roughness = 0.1
+
+const myMaterialD = new BasicMaterial()
+myMaterialD.texture = d
+// myMaterialD.metallic = 0.9
+// myMaterialD.roughness = 0.1
+
+const myMaterialE = new BasicMaterial()
+myMaterialD.texture = e
+// myMaterialD.metallic = 0.9
+// myMaterialD.roughness = 0.1
+
+const myMaterialF = new BasicMaterial()
+myMaterialD.texture = f
+// myMaterialD.metallic = 0.9
+// myMaterialD.roughness = 0.1
+
+var textBox = new Entity();
+textBox.addComponent(new BoxShape())
+textBox.addComponent(new Transform())
+
+textBox.addComponent(myMaterialA)
+engine.addEntity(textBox)
+
+
 @Component("lerpData")
 export class LerpData implements ISystem {
 
     origin: Vector3 = Vector3.Zero()
     target: Vector3 = Vector3.Zero()
     startGame: Boolean = false;
+    isLastBlock: Boolean = false;
     fraction: number = 0
 }
 
@@ -160,33 +215,36 @@ export class LerpMove implements ISystem {
 
     private _cube: Entity // the type is a custom component
     private _transform;
+    private _material;
 
     constructor(cubeComponent: Entity){
         this._cube = cubeComponent
         this._startPosition = this._cube.getComponent(Transform).position;
         // this._cube.getComponent(Transform).position.set(this._startPosition.x, this._startPosition.y, this._startPosition.z);
         this._transform = this._cube.getComponent(Transform)
+        this._material = this._cube.getComponent(BasicMaterial)
     }
 
-    private _speed = 1.5;
+    private _speed = 1;
     private _counter = 0;
-    private _rounds = 1;
+    private _rounds = 3;
     private _startPosition;
     private _delta = 0;
     // private _startPosition2 = new Vector3(0.5, 0.415,0);
     private _endPosition = new Vector3(0, 0.015,0);
+    private _stopPosition = this._endPosition;
 
     update(dt: number) {
         let lerp = this._cube.getComponent(LerpData)
-
+        let velocity = (dt) * this._speed;
         if (lerp.startGame) {
 
 
             // let lerp = this._cube.getComponent(LerpData)
             // if (lerp.fraction < 1) {
 
-            if (this._transform.position.y > this._endPosition.y && this._counter < this._rounds) {
-                this._delta = 0;
+            // if (this._transform.position.y > this._endPosition.y && this._counter < this._rounds) {
+                //this._delta = 0;
                 // if (lerp.fraction > 0.01 && this._counter == 1) {
                     // this._speed = 40;
                 //}
@@ -205,30 +263,71 @@ export class LerpMove implements ISystem {
                 // )
                 // lerp.fraction += (0.03 / 50) * this._speed;
 
-                this._transform.position = this._transform.position.add(new Vector3(0, (-dt) * this._speed, 0));
+                let diff = Math.abs(this._transform.position.y - this._endPosition.y);
+                let step = (diff - velocity) >= 0 ? velocity : diff % velocity;
 
-            } else if (this._rounds == this._counter) {
-                if  (this._startPosition.y <= this._transform.position.y) {
-                    this._transform.position = this._transform.position.add(new Vector3(0, -dt * this._speed, 0));
-                } else {
-                    this._transform.position.set(this._startPosition.x, this._startPosition.y, this._startPosition.z)
-                    this._counter = 0;
-                    lerp.startGame = false;
+                if (diff != 0) {
+                    this._delta = velocity-step;
                 }
+
+                // if (lerp.isLastBlock && (diff - velocity) >= 0) {
+                //
+                //     this._delta = -Math.abs(this._transform.position.y - this._endPosition.y);
+                // } else {
+                //     this._delta = -step;
+                // }
+                this._transform.position = this._transform.position.add(new Vector3(0, -step, 0));
+
+                if (this._transform.position.y - this._endPosition.y <= 0) {
+                    if (this._counter < this._rounds) {
+                        let diff = Math.abs(this._transform.position.y - this._endPosition.y);
+                        // if (!lerp.isLastBlock ) {
+                        //     // this._delta = velocity;
+                        // } else {
+                        //     this._delta = diff;
+                        // }
+                        if (this._counter == this._rounds - 1) {
+                            var random = Math.floor(Math.random() * 6);
+                            this._material.texture = materialsArray[random]
+                        }
+                        this._transform.position = this._transform.position.set(0, 0.515 - this._delta, 0);
+
+                        this._counter++;
+
+                    } else {
+                        this._transform.position.set(this._startPosition.x, this._startPosition.y, this._startPosition.z)
+
+                        this._counter = 0;
+                        this._endPosition = this._stopPosition;
+                        lerp.startGame = false;
+                    }
+
+                }
+
+             if (this._rounds == this._counter) {
+
+                 this._endPosition = this._startPosition;
+                // if  (this._startPosition.y <= this._transform.position.y) {
+                //     this._transform.position = this._transform.position.add(new Vector3(0, -velocity, 0));
+                // } else {
+                //     this._transform.position.set(this._startPosition.x, this._startPosition.y, this._startPosition.z)
+                //     this._counter = 0;
+                //     lerp.startGame = false;
+                // }
 
             } else {
 
-                if (this._counter < this._rounds) {
-                     this._delta = Math.abs(this._transform.position.y - this._endPosition.y) + dt * this._speed;
-                }
-                this._counter++;
-                this._transform.position = this._transform.position.set(0, 0.515 - this._delta, 0);
-
-                // this._cube.getComponent(LerpData).origin.set(0, 0.42, 0);
-                if (this._rounds == this._counter) {
-
-
-                }
+                // if (this._counter < this._rounds) {
+                //      this._delta = Math.abs(this._transform.position.y - this._endPosition.y) + dt * this._speed;
+                // }
+                // this._counter++;
+                // this._transform.position = this._transform.position.set(0, 0.515 - this._delta, 0);
+                //
+                // // this._cube.getComponent(LerpData).origin.set(0, 0.42, 0);
+                // if (this._rounds == this._counter) {
+                //
+                //
+                // }
 
 
 
@@ -238,35 +337,7 @@ export class LerpMove implements ISystem {
      }
 }
 
-const myMaterialA = new Material()
-myMaterialA.albedoColor = Color3.Blue()
-myMaterialA.metallic = 0.9
-myMaterialA.roughness = 0.1
 
-const myMaterialB = new Material()
-myMaterialB.albedoColor = Color3.Yellow()
-myMaterialB.metallic = 0.9
-myMaterialB.roughness = 0.1
-
-const myMaterialC = new Material()
-myMaterialC.albedoColor = Color3.White()
-myMaterialC.metallic = 0.9
-myMaterialC.roughness = 0.1
-
-const myMaterialD = new Material()
-myMaterialD.albedoColor = Color3.Red()
-myMaterialD.metallic = 0.9
-myMaterialD.roughness = 0.1
-
-const myMaterialE = new Material()
-myMaterialD.albedoColor = Color3.Green()
-myMaterialD.metallic = 0.9
-myMaterialD.roughness = 0.1
-
-const myMaterialF = new Material()
-myMaterialD.albedoColor = Color3.Purple()
-myMaterialD.metallic = 0.9
-myMaterialD.roughness = 0.1
 
 var cube = new Entity();
 cube.addComponent(new Transform({ position: new Vector3(0, 0.515, 0) }))
@@ -274,7 +345,7 @@ cube.getComponent(Transform).scale.set(0.1, 0.1, 0.01)
 cube.addComponent(new BoxShape());
 cube.addComponent(new LerpData())
 cube.addComponent(myMaterialA)
-cube.getComponent(LerpData).origin = new Vector3(0, 0.5, 0)
+cube.getComponent(LerpData).origin = new Vector3(0, 0.515, 0)
 cube.getComponent(LerpData).target = new Vector3(0, 0, 0)
 
 cube.setParent(slotMachineScreen)
@@ -320,8 +391,9 @@ cube4.addComponent(new LerpData())
 cube4.addComponent(myMaterialE)
 cube4.getComponent(LerpData).origin = new Vector3(0, 0.115, 0)
 cube4.getComponent(LerpData).target = new Vector3(0, 0, 0)
+cube4.getComponent(LerpData).isLastBlock = true;
 
- cube4.setParent(slotMachineScreen)
+cube4.setParent(slotMachineScreen)
 
 var cube5 = new Entity();
 cube5.addComponent(new Transform({ position: new Vector3(1, 0.015, 0) }))
