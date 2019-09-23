@@ -1,290 +1,273 @@
 /// --- Set up a system ---
 import utils from "../node_modules/decentraland-ecs-utils/index";
+//
+// export class SlotElement {
+//   private _startPos: Vector3;
+//   private _endPosition: Vector3;
+//
+//   private _cube = new Entity();
+//
+//   constructor(startPos: Vector3, endPosition: Vector3) {
+//     this._startPos = startPos;
+//     this._endPosition = endPosition;
+//
+//     // add a transform to the entity
+//     this._cube.addComponent(new Transform({ position: new Vector3(this._startPos.x, this._startPos.y, this._startPos.z) }))
+//     this._cube.getComponent(Transform).scale.set(0.1, 0.1, 0.01)
+//     const that = this;
+//
+//     const move = new utils.MoveTransformComponent(this._startPos, this._endPosition, 0.2, function() {
+//       that._cube.addComponent(new utils.ExpireIn(10))
+//       // let testElement = new SlotElement(new Vector3(2, 1, 2), new Vector3(2, 3, 2));
+//       // testElement.Spawn()
+//     }, utils.InterpolationType.EASEQUAD);
+//     // add a shape to the entity
+//     this._cube.addComponent(new BoxShape())
+//
+//     this._cube.addComponent(new utils.ToggleComponent(utils.ToggleState.Off, value =>{
+//       if (value == utils.ToggleState.On){
+//         //set color to green
+//
+//         this._cube.addComponent(move)
+//
+//       }
+//       else{
+//         //set color to red
+//       }
+//     }))
+//
+//
+//   }
+//
+//   Move() {
+//     this._cube.getComponent(utils.ToggleComponent).toggle()
+//   }
+//
+//
+//   Spawn() {
+//     // add the entity to the engine
+//     engine.addEntity(this._cube)
+//   }
+//
+// }
 
-/// --- Spawner function ---
-
-function spawnCube(x: number, y: number, z: number) {
-  // create the entity
-  const cube = new Entity()
-
-  // add a transform to the entity
-  cube.addComponent(new Transform({ position: new Vector3(x, y, z) }))
-  cube.getComponent(Transform).scale.set(0.1, 0.1, 0.01)
-
-  // add a shape to the entity
-  cube.addComponent(new BoxShape())
-
-  // add the entity to the engine
-  engine.addEntity(cube)
-
-  return cube
-}
-
-export class SlotElement {
-  private _startPos: Vector3;
-  private _endPosition: Vector3;
-
-  private _cube = new Entity();
-
-  constructor(startPos: Vector3, endPosition: Vector3) {
-    this._startPos = startPos;
-    this._endPosition = endPosition;
-
-    // add a transform to the entity
-    this._cube.addComponent(new Transform({ position: new Vector3(this._startPos.x, this._startPos.y, this._startPos.z) }))
-    this._cube.getComponent(Transform).scale.set(0.1, 0.1, 0.01)
-    const that = this;
-
-    const move = new utils.MoveTransformComponent(this._startPos, this._endPosition, 0.2, function() {
-      that._cube.addComponent(new utils.ExpireIn(10))
-      // let testElement = new SlotElement(new Vector3(2, 1, 2), new Vector3(2, 3, 2));
-      // testElement.Spawn()
-    }, utils.InterpolationType.EASEQUAD);
-    // add a shape to the entity
-    this._cube.addComponent(new BoxShape())
-
-    this._cube.addComponent(new utils.ToggleComponent(utils.ToggleState.Off, value =>{
-      if (value == utils.ToggleState.On){
-        //set color to green
-
-        this._cube.addComponent(move)
-
-      }
-      else{
-        //set color to red
-      }
-    }))
-
-
-  }
-
-
-
-
-  Move() {
-    this._cube.getComponent(utils.ToggleComponent).toggle()
-  }
-
-
-  Spawn() {
-    // add the entity to the engine
-    engine.addEntity(this._cube)
-  }
-
-}
-
-const button = new Entity();
-button.addComponent(new Transform({ position: new Vector3(2, 1.2, 2) }))
-button.getComponent(Transform).scale.set(0.5, 0.5, 0.2)
-button.addComponent(new BoxShape())
-button.addComponent(
-    new OnClick(() => {
-      testElement.Move();
-      testElement2.Move();
-      testElement3.Move();
-      testElement4.Move();
-    })
-)
+// const button = new Entity();
+// button.addComponent(new Transform({ position: new Vector3(2, 1.2, 2) }))
+// button.getComponent(Transform).scale.set(0.5, 0.5, 0.2)
+// button.addComponent(new BoxShape())
+// button.addComponent(
+//     new OnClick(() => {
+//       testElement.Move();
+//       testElement2.Move();
+//       testElement3.Move();
+//       testElement4.Move();
+//     })
+// )
 
 //
 // engine.addEntity(button);
-const input = Input.instance
-input.subscribe("BUTTON_DOWN", ActionButton.POINTER, false, e => {
-  // testElement.Move();
-  // testElement2.Move();
-  // testElement3.Move();
-  // testElement4.Move();
-
-    cube.getComponent(LerpData).startGame = true;
-    cube1.getComponent(LerpData).startGame = true;
-    cube2.getComponent(LerpData).startGame = true;
-    cube3.getComponent(LerpData).startGame = true;
-    cube4.getComponent(LerpData).startGame = true;
-    cube5.getComponent(LerpData).startGame = true;
-})
-
-let testElement = new SlotElement(new Vector3(2, 2, 2), new Vector3(2, 1, 2));
-let testElement2 = new SlotElement(new Vector3(2, 2.1, 2), new Vector3(2, 0.9, 2));
-let testElement3 = new SlotElement(new Vector3(2, 2.2, 2), new Vector3(2, 0.8, 2));
-let testElement4 = new SlotElement(new Vector3(2, 2.3, 2), new Vector3(2, 0.7, 2));
-
-testElement.Spawn();
-testElement2.Spawn();
-testElement3.Spawn();
 
 
-let startRound = false;
+// let testElement = new SlotElement(new Vector3(2, 2, 2), new Vector3(2, 1, 2));
+// let testElement2 = new SlotElement(new Vector3(2, 2.1, 2), new Vector3(2, 0.9, 2));
+// let testElement3 = new SlotElement(new Vector3(2, 2.2, 2), new Vector3(2, 0.8, 2));
+// let testElement4 = new SlotElement(new Vector3(2, 2.3, 2), new Vector3(2, 0.7, 2));
+//
+// testElement.Spawn();
+// testElement2.Spawn();
+// testElement3.Spawn();
+
+const tigerTexture = new Texture("materials/1.png");
+const cherryTexture = new Texture("materials/2.png");
+const sevenTexture = new Texture("materials/3.png");
+const bananaTexture = new Texture("materials/4.png");
+const plumTexture = new Texture("materials/5.png");
+const melonTexture = new Texture("materials/6.png");
+const diamondTexture = new Texture("materials/7.png");
+const citronTexture = new Texture("materials/8.png");
+const barTexture = new Texture("materials/9.png");
+
+const materialsArray: Array<Texture> = [tigerTexture, cherryTexture, sevenTexture, bananaTexture, plumTexture, melonTexture, diamondTexture, citronTexture, barTexture];
+
+enum SpinTexture {
+    Tiger = 0,
+    Cherry,
+    Seven,
+    Banana,
+    Plum,
+    Melon,
+    Diamond,
+    Citron,
+    Bar
+}
+
+function getMaterialInstance(material: SpinTexture): BasicMaterial {
+    let result  = new BasicMaterial();
+    // result.metallic = 0.2
+    // result.roughness = 0.8
+    // result.microSurface = 0.8
+    // result.specularIntensity = 0.7
+
+    switch(material) {
+        case SpinTexture.Tiger: {
+            result.texture = tigerTexture;
+            // result.alphaTexture = tigerTexture;
+            break;
+        }
+        case SpinTexture.Cherry: {
+            result.texture = cherryTexture;
+            // result.alphaTexture = cherryTexture;
+            break;
+        }
+        case SpinTexture.Seven: {
+            result.texture = sevenTexture;
+            // result.alphaTexture = sevenTexture;
+            break;
+        }
+        case SpinTexture.Banana: {
+            result.texture = bananaTexture;
+            // result.alphaTexture = bananaTexture;
+            break;
+        }
+        case SpinTexture.Plum: {
+            result.texture = plumTexture;
+            // result.alphaTexture = plumTexture;
+            break;
+        }
+        case SpinTexture.Melon: {
+            result.texture = melonTexture;
+            // result.alphaTexture = melonTexture;
+            break;
+        }
+        case SpinTexture.Diamond: {
+            result.texture = diamondTexture;
+            // result.alphaTexture = diamondTexture;
+            break;
+        }
+        case SpinTexture.Citron: {
+            result.texture = citronTexture;
+            // result.alphaTexture = citronTexture;
+            break;
+        }
+        case SpinTexture.Bar: {
+            result.texture = barTexture;
+            // result.alphaTexture = barTexture;
+            break;
+        }
+        default: {
+            result.texture = tigerTexture;
+            // result.alphaTexture = tigerTexture;
+            break;
+        }
+    }
+
+    return result;
+}
 
 @Component("SlotMachineScreen")
 export class SlotMachineScreen {}
 
 let slotMachineScreen = new Entity();
-slotMachineScreen.addComponent(new Transform({position: new Vector3(1, 1.4, 1)}))
+slotMachineScreen.addComponent(new Transform({position: new Vector3(3, 1.5, 3), rotation: new Quaternion(0, 90,0,-45), scale: new Vector3(3, 3, 0.06)}))
+
+let backgroundPlane = new Entity();
+backgroundPlane.addComponent(new PlaneShape());
+backgroundPlane.addComponent(new Transform({position: new Vector3(0, 0.22, -0.02)})).scale.set(1, 0.415, 0);
+let backPlane = new Entity();
+backPlane.addComponent(new BoxShape());
+backPlane.addComponent(new Transform({position: new Vector3(0, 0.22, -2)})).scale.set(1, 0.415, 0.06);
 
 let topBlock = new Entity();
 topBlock.addComponent(new BoxShape());
-topBlock.addComponent(new Transform({position: new Vector3(0, 0.54, 0)})).scale.set(1, 0.15, 0.06);
+topBlock.addComponent(new Transform({position: new Vector3(0, 0.44, 0)})).scale.set(1, 0.15, 5);
 
 let rightBlock = new Entity();
 rightBlock.addComponent(new BoxShape());
-rightBlock.addComponent(new Transform({position: new Vector3(-0.45, 0.27, 0)})).scale.set(0.10, 0.4, 0.06);
+rightBlock.addComponent(new Transform({position: new Vector3(-0.4, 0.22, 0)})).scale.set(0.20, 0.3, 5);
 
 let bottomBlock = new Entity();
 bottomBlock.addComponent(new BoxShape());
-bottomBlock.addComponent(new Transform({position: new Vector3(0, 0, 0)})).scale.set(1, 0.15, 0.06);
+bottomBlock.addComponent(new Transform({position: new Vector3(0, 0, 0)})).scale.set(1, 0.15, 5);
 
 let leftBlock = new Entity();
 leftBlock.addComponent(new BoxShape());
-leftBlock.addComponent(new Transform({position: new Vector3(0.45, 0.27, 0)})).scale.set(0.10, 0.4, 0.06);
+leftBlock.addComponent(new Transform({position: new Vector3(0.4, 0.22, 0)})).scale.set(0.20, 0.3, 5);
 
+backgroundPlane.setParent(slotMachineScreen);
+backPlane.setParent(slotMachineScreen);
 topBlock.setParent(slotMachineScreen);
 rightBlock.setParent(slotMachineScreen);
 bottomBlock.setParent(slotMachineScreen);
 leftBlock.setParent(slotMachineScreen);
 
 
-export class SpinBlock {
-
-}
-
-const a = new Texture("materials/1.png");
-const b = new Texture("materials/2.png")
-const c = new Texture("materials/3.png")
-const d = new Texture("materials/4.png")
-const e = new Texture("materials/5.png")
-const f = new Texture("materials/6.png")
-const g = new Texture("materials/7.png")
-const h = new Texture("materials/8.png")
-const i = new Texture("materials/9.png")
-
-
-const materialsArray: Array<Texture> = [a, b, c, d, e, f , g, h, i]
-
-
-
-const myMaterialA = new BasicMaterial()
-
-myMaterialA.texture  = a
-// myMaterialA.metallic = 0.9
-// myMaterialA.roughness = 0.1
-
-const myMaterialB = new BasicMaterial()
-myMaterialB.texture = b
-// myMaterialB.metallic = 0.9
-// myMaterialB.roughness = 0.1
-
-const myMaterialC = new BasicMaterial()
-myMaterialC.texture = c
-// myMaterialC.metallic = 0.9
-// myMaterialC.roughness = 0.1
-
-const myMaterialD = new BasicMaterial()
-myMaterialD.texture = d
-// myMaterialD.metallic = 0.9
-// myMaterialD.roughness = 0.1
-
-const myMaterialE = new BasicMaterial()
-myMaterialD.texture = e
-// myMaterialD.metallic = 0.9
-// myMaterialD.roughness = 0.1
-
-const myMaterialF = new BasicMaterial()
-myMaterialD.texture = f
-// myMaterialD.metallic = 0.9
-// myMaterialD.roughness = 0.1
-
-
-
-@Component("lerpData")
-export class LerpData implements ISystem {
-
-    origin: Vector3 = Vector3.Zero()
-    target: Vector3 = Vector3.Zero()
+@Component("slotMachineStateSystem")
+export class SlotMachineStateSystem implements ISystem {
     startGame: Boolean = false;
     isLastBlock: Boolean = false;
-    fraction: number = 0
 }
 
-export class LerpMove implements ISystem {
+export class SlotMachineSystem implements ISystem {
 
-    private _cube: Entity // the type is a custom component
+    private _cube: Entity
     private _transform;
     private _material;
 
     constructor(cubeComponent: Entity){
         this._cube = cubeComponent
         this._startPosition = this._cube.getComponent(Transform).position;
-        // this._cube.getComponent(Transform).position.set(this._startPosition.x, this._startPosition.y, this._startPosition.z);
         this._transform = this._cube.getComponent(Transform)
         this._material = this._cube.getComponent(BasicMaterial)
+        this._endPosition = new Vector3(this._startPosition.x, 0.015, this._startPosition.z);
+        this._stopPosition = this._endPosition;
+        this._maxMovement = this._rounds * 4 * this._transform.scale.y;
     }
 
-    private _speed = 1;
+
     private _counter = 0;
-    private _rounds = 3;
+    private _rounds = 5;
     private _startPosition;
+    private _minSpeed = 0.08;
+    private _maxSpeed = 1.6;
     private _delta = 0;
-    // private _startPosition2 = new Vector3(0.5, 0.415,0);
-    private _endPosition = new Vector3(0, 0.015,0);
-    private _stopPosition = this._endPosition;
+    private _velocity = 0.033333* this._minSpeed;
+    private _maxMovement = 0
+    private _movementCounter = 0;
+
+    private _endPosition;
+    private _stopPosition;
 
     update(dt: number) {
-        let lerp = this._cube.getComponent(LerpData)
-        let velocity = (dt) * this._speed;
+        let lerp = this._cube.getComponent(SlotMachineStateSystem);
         if (lerp.startGame) {
 
+            if ((this._movementCounter * 100) / this._maxMovement >= 1 && (this._movementCounter * 100) / this._maxMovement <= 10 && this._velocity <= this._maxSpeed) {
+                this._velocity *= 1.3;
+            }
 
-            // let lerp = this._cube.getComponent(LerpData)
-            // if (lerp.fraction < 1) {
+            if ((this._movementCounter * 100) / this._maxMovement >= 80 && this._velocity <= this._maxSpeed) {
+                this._velocity *= 0.90;
+            }
 
-            // if (this._transform.position.y > this._endPosition.y && this._counter < this._rounds) {
-                //this._delta = 0;
-                // if (lerp.fraction > 0.01 && this._counter == 1) {
-                    // this._speed = 40;
-                //}
-                // if (lerp.fraction > 0.1 && this._counter == 1) {
-                    // this._speed = 40;
-                //}
-
-                // if ( this._counter == 2) {
-                    // this._speed = 60;
-                // }
-
-                // transform.position = Vector3.Lerp(
-                //     lerp.origin,
-                //     lerp.target,
-                //     lerp.fraction
-                // )
-                // lerp.fraction += (0.03 / 50) * this._speed;
-
-                let diff = Math.abs(this._transform.position.y - this._endPosition.y);
-                let step = (diff - velocity) >= 0 ? velocity : diff % velocity;
+            let diff = Math.abs(this._transform.position.y - this._endPosition.y);
+                let step = (diff - this._velocity) >= 0 ? this._velocity : diff % this._velocity;
 
                 if (diff != 0) {
-                    this._delta = velocity-step;
+                    this._delta = this._velocity-step;
                 }
 
-                // if (lerp.isLastBlock && (diff - velocity) >= 0) {
-                //
-                //     this._delta = -Math.abs(this._transform.position.y - this._endPosition.y);
-                // } else {
-                //     this._delta = -step;
-                // }
                 this._transform.position = this._transform.position.add(new Vector3(0, -step, 0));
+                this._movementCounter += Math.abs(step + this._delta);
 
                 if (this._transform.position.y - this._endPosition.y <= 0) {
                     if (this._counter < this._rounds) {
                         let diff = Math.abs(this._transform.position.y - this._endPosition.y);
-                        // if (!lerp.isLastBlock ) {
-                        //     // this._delta = velocity;
-                        // } else {
-                        //     this._delta = diff;
-                        // }
+
                         if (this._counter == this._rounds - 1) {
-                            var random = Math.floor(Math.random() * 6);
-                            this._material.texture = materialsArray[random]
+                            let random = Math.floor(Math.random() * 6);
+                            this._material.texture = materialsArray[random];
                         }
-                        this._transform.position = this._transform.position.set(0, 0.515 - this._delta, 0);
+                        this._transform.position = this._transform.position.set(this._startPosition.x, 0.415 - this._delta, this._startPosition.z);
 
                         this._counter++;
 
@@ -294,127 +277,235 @@ export class LerpMove implements ISystem {
                         this._counter = 0;
                         this._endPosition = this._stopPosition;
                         lerp.startGame = false;
+                        this._velocity = 0.033333* this._minSpeed;
+                        this._movementCounter = 0;
                     }
 
                 }
 
              if (this._rounds == this._counter) {
-
                  this._endPosition = this._startPosition;
-                // if  (this._startPosition.y <= this._transform.position.y) {
-                //     this._transform.position = this._transform.position.add(new Vector3(0, -velocity, 0));
-                // } else {
-                //     this._transform.position.set(this._startPosition.x, this._startPosition.y, this._startPosition.z)
-                //     this._counter = 0;
-                //     lerp.startGame = false;
-                // }
-
-            } else {
-
-                // if (this._counter < this._rounds) {
-                //      this._delta = Math.abs(this._transform.position.y - this._endPosition.y) + dt * this._speed;
-                // }
-                // this._counter++;
-                // this._transform.position = this._transform.position.set(0, 0.515 - this._delta, 0);
-                //
-                // // this._cube.getComponent(LerpData).origin.set(0, 0.42, 0);
-                // if (this._rounds == this._counter) {
-                //
-                //
-                // }
-
-
-
-                // lerp.fraction = 0;
-            }
+             }
         }
      }
 }
 
 
-
-var cube = new Entity();
-cube.addComponent(new Transform({ position: new Vector3(0, 0.515, 0) }))
-cube.getComponent(Transform).scale.set(0.1, 0.1, 0.01)
-cube.addComponent(new BoxShape());
-cube.addComponent(new LerpData())
-cube.addComponent(myMaterialA)
-cube.getComponent(LerpData).origin = new Vector3(0, 0.515, 0)
-cube.getComponent(LerpData).target = new Vector3(0, 0, 0)
-
-cube.setParent(slotMachineScreen)
-
-var cube1 = new Entity();
-cube1.addComponent(new Transform({ position: new Vector3(0, 0.415, 0) }))
-cube1.getComponent(Transform).scale.set(0.1, 0.1, 0.01)
-cube1.addComponent(new BoxShape());
-cube1.addComponent(new LerpData())
-cube1.addComponent(myMaterialB)
-cube1.getComponent(LerpData).origin = new Vector3(0, 0.415, 0)
-cube1.getComponent(LerpData).target = new Vector3(0, 0, 0)
-
-cube1.setParent(slotMachineScreen)
-
-var cube2 = new Entity();
-cube2.addComponent(new Transform({ position: new Vector3(0, 0.315, 0) }))
-cube2.getComponent(Transform).scale.set(0.1, 0.1, 0.01)
-cube2.addComponent(new BoxShape());
-cube2.addComponent(new LerpData())
-cube2.addComponent(myMaterialC)
-cube2.getComponent(LerpData).origin = new Vector3(0, 0.315, 0)
-cube2.getComponent(LerpData).target = new Vector3(0, 0, 0)
-
-cube2.setParent(slotMachineScreen)
-
-var cube3 = new Entity();
-cube3.addComponent(new Transform({ position: new Vector3(0, 0.215, 0) }))
-cube3.getComponent(Transform).scale.set(0.1, 0.1, 0.01)
-cube3.addComponent(new BoxShape());
-cube3.addComponent(new LerpData())
-cube3.addComponent(myMaterialD)
-cube3.getComponent(LerpData).origin = new Vector3(0, 0.215, 0)
-cube3.getComponent(LerpData).target = new Vector3(0, 0, 0)
-
-cube3.setParent(slotMachineScreen)
-
-var cube4 = new Entity();
-cube4.addComponent(new Transform({ position: new Vector3(0, 0.115, 0) }))
-cube4.getComponent(Transform).scale.set(0.1, 0.1, 0.01)
-cube4.addComponent(new BoxShape());
-cube4.addComponent(new LerpData())
-cube4.addComponent(myMaterialE)
-cube4.getComponent(LerpData).origin = new Vector3(0, 0.115, 0)
-cube4.getComponent(LerpData).target = new Vector3(0, 0, 0)
-cube4.getComponent(LerpData).isLastBlock = true;
-
-cube4.setParent(slotMachineScreen)
-
-var cube5 = new Entity();
-cube5.addComponent(new Transform({ position: new Vector3(1, 0.015, 0) }))
-cube5.getComponent(Transform).scale.set(0.1, 0.1, 0.01)
-cube5.addComponent(new BoxShape());
-cube5.addComponent(new LerpData())
-cube5.addComponent(myMaterialF)
-cube5.getComponent(LerpData).origin = new Vector3(0, 0.015, 0)
-cube5.getComponent(LerpData).target = new Vector3(0, 0, 0)
-
-// cube5.setParent(slotMachineScreen)
+ let testShape = new PlaneShape();
+// testShape.uvs = [
+//     // ONE FACE
+//     0.33,  // (B) Horizontal width right end position
+//     0,  // (C) Vertical height bottom start position
+//     0,  // (A) Horizontal width left start position
+//     0,  // (C) Vertical height bottom start position
 //
-// engine.addEntity(cube)
-// engine.addEntity(cube1)
-// engine.addEntity(cube2)
-// engine.addEntity(cube3)
-// engine.addEntity(cube4)
+//     0,  // (A) Horizontal width left start position
+//     0.33,  // (D) Vertical top height end position
+//     0.33,  // (B) Horizontal width right end position
+//     0.33,  // (D) Vertical top height end position
+//
+//     // OTHER FACE
+//     0.66,  // (B) Horizontal width right end position
+//     0.0,  // (C) Vertical height bottom start position
+//     0.33,  // (A) Horizontal width left start position
+//     0.0,  // (C) Vertical height bottom start position
+//
+//
+//     0.33,  // (A) Horizontal width left start position
+//     0.33,  // (D) Vertical top height end position
+//     0.66,  // (B) Horizontal width right end position
+//     0.33  // (D) Vertical top height end position
+// ];
 
 
- engine.addEntity(slotMachineScreen);
 
-engine.addSystem(new LerpMove(cube))
-engine.addSystem(new LerpMove(cube1))
-engine.addSystem(new LerpMove(cube2))
-engine.addSystem(new LerpMove(cube3))
-engine.addSystem(new LerpMove(cube4))
-engine.addSystem(new LerpMove(cube5))
+class SpinBlock extends Entity {
+
+    public startGame() {
+        if (!this._firstSpinBlock_2.getComponent(SlotMachineStateSystem).startGame) {
+            const sound = new Entity()
+            const sound2 = new Entity()
+            // Create AudioClip object, holding sounds file
+            const clip = new AudioClip('sounds/startSound.wav')
+            const clip2 = new AudioClip('sounds/spinningSound.mp3')
+            // Create AudioSource component, referencing `clip`
+            const source = new AudioSource(clip)
+            const source2 = new AudioSource(clip2)
+
+            // Add AudioSource component to entity
+            sound.addComponent(source)
+            sound2.addComponent(source2)
+            engine.addEntity(sound);
+            engine.addEntity(sound2);
+
+            // Play sound
+            source.playing = true
+            source2.playing = true
+        }
+
+        this._firstSpinBlock_1.getComponent(SlotMachineStateSystem).startGame = true;
+        this._secondSpinBlock_1.getComponent(SlotMachineStateSystem).startGame = true;
+        this._thirdSpinBlock_1.getComponent(SlotMachineStateSystem).startGame = true;
+        this._fourthSpinBlock1.getComponent(SlotMachineStateSystem).startGame = true;
+        this._firstSpinBlock_2.getComponent(SlotMachineStateSystem).startGame = true;
+        this._secondSpinBlock_2.getComponent(SlotMachineStateSystem).startGame = true;
+        this._thirdSpinBlock_2.getComponent(SlotMachineStateSystem).startGame = true;
+        this._fourthSpinBlock2.getComponent(SlotMachineStateSystem).startGame = true;
+        this._firstSpinBlock_3.getComponent(SlotMachineStateSystem).startGame = true;
+        this._secondSpinBlock_3.getComponent(SlotMachineStateSystem).startGame = true;
+        this._thirdSpinBlock_3.getComponent(SlotMachineStateSystem).startGame = true;
+        this._fourthSpinBlock3.getComponent(SlotMachineStateSystem).startGame = true;
+
+}
+    _firstSpinBlock_1 = new Entity();
+    _secondSpinBlock_1 = new Entity();
+    _thirdSpinBlock_1 = new Entity();
+    _fourthSpinBlock1 = new Entity();
+    _firstSpinBlock_2 = new Entity();
+    _secondSpinBlock_2 = new Entity();
+    _thirdSpinBlock_2 = new Entity();
+    _fourthSpinBlock2 = new Entity();
+    _firstSpinBlock_3 = new Entity();
+    _secondSpinBlock_3 = new Entity();
+    _thirdSpinBlock_3 = new Entity();
+    _fourthSpinBlock3 = new Entity();
+
+    constructor() {
+        super();
+        this._firstSpinBlock_1.addComponent(new Transform({ position: new Vector3(0.2, 0.415, -0.01), rotation: new Quaternion(180, 0, 0, 0) }))
+        this._firstSpinBlock_1.getComponent(Transform).scale.set(0.1, 0.1, 0.001)
+        this._firstSpinBlock_1.addComponent(testShape);
+        this._firstSpinBlock_1.addComponent(new SlotMachineStateSystem())
+        this._firstSpinBlock_1.addComponent(getMaterialInstance(SpinTexture.Tiger))
+
+        this._firstSpinBlock_1.setParent(slotMachineScreen)
+
+
+        this._secondSpinBlock_1.addComponent(new Transform({ position: new Vector3(0.2, 0.315, -0.01), rotation: new Quaternion(180, 0, 0, 0) }))
+        this._secondSpinBlock_1.getComponent(Transform).scale.set(0.1, 0.1, 0.001)
+        this._secondSpinBlock_1.addComponent(testShape);
+        this._secondSpinBlock_1.addComponent(new SlotMachineStateSystem())
+        this._secondSpinBlock_1.addComponent(getMaterialInstance(SpinTexture.Cherry))
+
+        this._secondSpinBlock_1.setParent(slotMachineScreen)
+
+
+        this._thirdSpinBlock_1.addComponent(new Transform({ position: new Vector3(0.2, 0.215, -0.01), rotation: new Quaternion(180, 0, 0, 0) }))
+        this._thirdSpinBlock_1.getComponent(Transform).scale.set(0.1, 0.1, 0.001)
+        this._thirdSpinBlock_1.addComponent(testShape);
+        this._thirdSpinBlock_1.addComponent(new SlotMachineStateSystem())
+        this._thirdSpinBlock_1.addComponent(getMaterialInstance(SpinTexture.Seven))
+
+        this._thirdSpinBlock_1.setParent(slotMachineScreen)
+
+
+        this._fourthSpinBlock1.addComponent(new Transform({ position: new Vector3(0.2, 0.115, -0.01), rotation: new Quaternion(180, 0, 0, 0) }))
+        this._fourthSpinBlock1.getComponent(Transform).scale.set(0.1, 0.1, 0.001)
+        this._fourthSpinBlock1.addComponent(testShape);
+        this._fourthSpinBlock1.addComponent(new SlotMachineStateSystem())
+        this._fourthSpinBlock1.addComponent(getMaterialInstance(SpinTexture.Banana))
+
+        this._fourthSpinBlock1.setParent(slotMachineScreen)
+
+
+        this._firstSpinBlock_2.addComponent(new Transform({ position: new Vector3(0.0, 0.415, -0.01), rotation: new Quaternion(180, 0, 0, 0) }))
+        this._firstSpinBlock_2.getComponent(Transform).scale.set(0.1, 0.1, 0.001)
+        this._firstSpinBlock_2.addComponent(testShape);
+        this._firstSpinBlock_2.addComponent(new SlotMachineStateSystem())
+        this._firstSpinBlock_2.addComponent(getMaterialInstance(SpinTexture.Diamond))
+
+         this._firstSpinBlock_2.setParent(slotMachineScreen)
+
+        //
+        this._secondSpinBlock_2.addComponent(new Transform({ position: new Vector3(0.0, 0.315, -0.01), rotation: new Quaternion(180, 0, 0, 0) }))
+        this._secondSpinBlock_2.getComponent(Transform).scale.set(0.1, 0.1, 0.001)
+        this._secondSpinBlock_2.addComponent(testShape);
+        this._secondSpinBlock_2.addComponent(new SlotMachineStateSystem())
+        this._secondSpinBlock_2.addComponent(getMaterialInstance(SpinTexture.Plum))
+
+        this._secondSpinBlock_2.setParent(slotMachineScreen)
+        //
+        //
+        this._thirdSpinBlock_2.addComponent(new Transform({ position: new Vector3(0.0, 0.215, -0.01), rotation: new Quaternion(180, 0, 0, 0) }))
+        this._thirdSpinBlock_2.getComponent(Transform).scale.set(0.1, 0.1, 0.001)
+        this._thirdSpinBlock_2.addComponent(testShape);
+        this._thirdSpinBlock_2.addComponent(new SlotMachineStateSystem())
+        this._thirdSpinBlock_2.addComponent(getMaterialInstance(SpinTexture.Plum))
+
+        this._thirdSpinBlock_2.setParent(slotMachineScreen)
+
+
+        this._fourthSpinBlock2.addComponent(new Transform({ position: new Vector3(0.0, 0.115, -0.01), rotation: new Quaternion(180, 0, 0, 0) }))
+        this._fourthSpinBlock2.getComponent(Transform).scale.set(0.1, 0.1, 0.001)
+        this._fourthSpinBlock2.addComponent(testShape);
+        this._fourthSpinBlock2.addComponent(new SlotMachineStateSystem())
+        this._fourthSpinBlock2.addComponent(getMaterialInstance(SpinTexture.Seven))
+
+        this._fourthSpinBlock2.setParent(slotMachineScreen)
+
+
+        this._firstSpinBlock_3.addComponent(new Transform({ position: new Vector3(-0.2, 0.415, -0.01), rotation: new Quaternion(180, 0, 0, 0) }))
+        this._firstSpinBlock_3.getComponent(Transform).scale.set(0.1, 0.1, 0.001)
+        this._firstSpinBlock_3.addComponent(testShape);
+        this._firstSpinBlock_3.addComponent(new SlotMachineStateSystem())
+        this._firstSpinBlock_3.addComponent(getMaterialInstance(SpinTexture.Citron))
+
+        this._firstSpinBlock_3.setParent(slotMachineScreen)
+
+
+        this._secondSpinBlock_3.addComponent(new Transform({ position: new Vector3(-0.2, 0.315, -0.01), rotation: new Quaternion(180, 0, 0, 0) }))
+        this._secondSpinBlock_3.getComponent(Transform).scale.set(0.1, 0.1, 0.001)
+        this._secondSpinBlock_3.addComponent(testShape);
+        this._secondSpinBlock_3.addComponent(new SlotMachineStateSystem())
+        this._secondSpinBlock_3.addComponent(getMaterialInstance(SpinTexture.Bar))
+
+        this._secondSpinBlock_3.setParent(slotMachineScreen)
+
+
+        this._thirdSpinBlock_3.addComponent(new Transform({ position: new Vector3(-0.2, 0.215, -0.01), rotation: new Quaternion(180, 0, 0, 0) }))
+        this._thirdSpinBlock_3.getComponent(Transform).scale.set(0.1, 0.1, 0.001)
+        this._thirdSpinBlock_3.addComponent(testShape);
+        this._thirdSpinBlock_3.addComponent(new SlotMachineStateSystem())
+        this._thirdSpinBlock_3.addComponent(getMaterialInstance(SpinTexture.Citron))
+
+        this._thirdSpinBlock_3.setParent(slotMachineScreen)
+
+
+        this._fourthSpinBlock3.addComponent(new Transform({ position: new Vector3(-0.2, 0.115, -0.01), rotation: new Quaternion(180, 0, 0, 0) }))
+        this._fourthSpinBlock3.getComponent(Transform).scale.set(0.1, 0.1, 0.001)
+        this._fourthSpinBlock3.addComponent(testShape);
+        this._fourthSpinBlock3.addComponent(new SlotMachineStateSystem())
+        this._fourthSpinBlock3.addComponent(getMaterialInstance(SpinTexture.Banana))
+
+        this._fourthSpinBlock3.setParent(slotMachineScreen)
+
+
+        engine.addEntity(slotMachineScreen);
+        engine.addSystem(new SlotMachineSystem(this._firstSpinBlock_1))
+        engine.addSystem(new SlotMachineSystem(this._secondSpinBlock_1))
+        engine.addSystem(new SlotMachineSystem(this._thirdSpinBlock_1))
+        engine.addSystem(new SlotMachineSystem(this._fourthSpinBlock1))
+
+        engine.addSystem(new SlotMachineSystem(this._firstSpinBlock_2))
+        engine.addSystem(new SlotMachineSystem(this._secondSpinBlock_2))
+        engine.addSystem(new SlotMachineSystem(this._thirdSpinBlock_2))
+        engine.addSystem(new SlotMachineSystem(this._fourthSpinBlock2))
+
+        engine.addSystem(new SlotMachineSystem(this._firstSpinBlock_3))
+        engine.addSystem(new SlotMachineSystem(this._secondSpinBlock_3))
+        engine.addSystem(new SlotMachineSystem(this._thirdSpinBlock_3))
+        engine.addSystem(new SlotMachineSystem(this._fourthSpinBlock3))
+    }
+}
+
+const input = Input.instance;
+let test = new SpinBlock();
+
+input.subscribe("BUTTON_DOWN", ActionButton.POINTER, false, e => {
+    test.startGame();
+});
+// engine.addSystem(new SlotMachineSystem(cube4))
+// engine.addSystem(new SlotMachineSystem(cube5))
 
 
 
