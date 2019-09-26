@@ -1,4 +1,4 @@
-import {materialsArray} from "./SlotMaterials";
+import {materialsArray, SpinTexture} from "./SlotMaterials";
 
 
  export const events = new EventManager();
@@ -15,6 +15,7 @@ export class onSpinBlockFinishEvent {
 export class SlotMachineStateSystem implements ISystem {
     startGame: Boolean = false;
     isLastBlock: Boolean = false;
+    slotIcon: SpinTexture;
 }
 
 export class SlotMachineSystem implements ISystem {
@@ -85,6 +86,7 @@ export class SlotMachineSystem implements ISystem {
                     if (this._counter == this._rounds - 1) {
                         let random = Math.floor(Math.random() * 6);
                         this._material.albedoTexture = materialsArray[random];
+                        lerp.slotIcon = random
                     }
 
                     this._transform.position = this._transform.position.set(this._startPosition.x, 0.415 - this._delta, this._startPosition.z);

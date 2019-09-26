@@ -7,7 +7,31 @@ export class onRoundFinishEvent {
 }
 
 export class SpinBlock extends Entity {
+
+    private _currentCredits = 1000;
+    private _creditsEntity;
+
+    public initText() {
+        this._creditsEntity = new Entity();
+        const credits = new TextShape(this._currentCredits.toString())
+        credits.fontSize = 2
+        credits.color = Color3.White()
+
+
+        this._creditsEntity.addComponentOrReplace(new Transform({
+            position: new Vector3(14.64, 1.3, 13.3),
+            rotation: new Quaternion(0, 1, 0, 1),
+            scale: new Vector3(0.2, 0.2, 0.2)}));
+        this._creditsEntity.addComponentOrReplace(credits);
+
+        engine.addEntity(this._creditsEntity)
+    }
+
     public startGame() {
+        if (this._currentCredits <= 0 && this._creditsEntity) {
+            this._currentCredits = 0;
+            return;
+        }
         if (!this._firstSpinBlock_2.getComponent(SlotMachineStateSystem).startGame) {
             const sound = new Entity()
             const sound2 = new Entity()
@@ -27,6 +51,10 @@ export class SpinBlock extends Entity {
             // Play sound
             source.playing = true
             source2.playing = true
+            if (this._creditsEntity) {
+                this._currentCredits -= 50;
+                this._creditsEntity.getComponent(TextShape).value = this._currentCredits;
+            }
         }
 
         this._firstSpinBlock_1.getComponent(SlotMachineStateSystem).startGame = true;
@@ -42,8 +70,51 @@ export class SpinBlock extends Entity {
         this._thirdSpinBlock_3.getComponent(SlotMachineStateSystem).startGame = true;
         this._fourthSpinBlock3.getComponent(SlotMachineStateSystem).startGame = true;
 
+
+
+
         events.addListener(onSpinBlockFinishEvent, null, () => {
             events.fireEvent(new onRoundFinishEvent())
+            let won = false;
+
+            if (this._secondSpinBlock_1.getComponent(SlotMachineStateSystem).slotIcon == this._secondSpinBlock_2.getComponent(SlotMachineStateSystem).slotIcon && this._secondSpinBlock_2.getComponent(SlotMachineStateSystem).slotIcon == this._secondSpinBlock_3.getComponent(SlotMachineStateSystem).slotIcon) {
+                won = true;
+                this._currentCredits += 100;
+            }
+
+            if (this._thirdSpinBlock_1.getComponent(SlotMachineStateSystem).slotIcon == this._thirdSpinBlock_2.getComponent(SlotMachineStateSystem).slotIcon && this._thirdSpinBlock_2.getComponent(SlotMachineStateSystem).slotIcon == this._thirdSpinBlock_3.getComponent(SlotMachineStateSystem).slotIcon) {
+                won = true;
+                this._currentCredits += 100;
+            }
+            if (this._fourthSpinBlock1.getComponent(SlotMachineStateSystem).slotIcon == this._fourthSpinBlock2.getComponent(SlotMachineStateSystem).slotIcon && this._fourthSpinBlock2.getComponent(SlotMachineStateSystem).slotIcon == this._fourthSpinBlock3.getComponent(SlotMachineStateSystem).slotIcon) {
+                won = true;
+                this._currentCredits += 100;
+            }
+            if (this._secondSpinBlock_1.getComponent(SlotMachineStateSystem).slotIcon == this._thirdSpinBlock_2.getComponent(SlotMachineStateSystem).slotIcon && this._thirdSpinBlock_2.getComponent(SlotMachineStateSystem).slotIcon == this._fourthSpinBlock3.getComponent(SlotMachineStateSystem).slotIcon) {
+                won = true;
+                this._currentCredits += 100;
+            }
+            if (this._fourthSpinBlock1.getComponent(SlotMachineStateSystem).slotIcon == this._thirdSpinBlock_2.getComponent(SlotMachineStateSystem).slotIcon && this._thirdSpinBlock_2.getComponent(SlotMachineStateSystem).slotIcon == this._secondSpinBlock_3.getComponent(SlotMachineStateSystem).slotIcon) {
+                won = true;
+                this._currentCredits += 100;
+            }
+
+            if (won) {
+                const sound = new Entity()
+                // Create AudioClip object, holding sounds file
+                const clip = new AudioClip('sounds/winningSound.mp3')
+                // Create AudioSource component, referencing `clip`
+                const source = new AudioSource(clip)
+
+                // Add AudioSource component to entity
+                sound.addComponent(source)
+                engine.addEntity(sound);
+
+                // Play sound
+                source.playing = true
+
+
+            }
         })
 
     }
@@ -66,6 +137,9 @@ export class SpinBlock extends Entity {
 
     constructor(slotMachineScreen: Entity) {
         super();
+
+
+
 
         let spinBlockSurface = new PlaneShape();
 

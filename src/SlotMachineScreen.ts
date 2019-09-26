@@ -68,6 +68,10 @@ export class SlotMachine {
         this._spinningBlocks = new SpinBlock(this._slotMachineScreen);
     }
 
+    public initCreditsText() {
+        this._spinningBlocks.initText();
+    }
+
     public setPosition(position: Vector3) {
         this._slotMachineScreen.getComponent(Transform).position = position;
     }

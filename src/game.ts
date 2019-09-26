@@ -15,6 +15,38 @@ const transform = new Transform({
 scene.addComponentOrReplace(transform)
 engine.addEntity(scene)
 
+const myText = new TextShape("Mana:")
+myText.fontSize = 2
+myText.color = Color3.White()
+
+let textEntity = new Entity();
+
+const button = new Entity()
+button.addComponent(new SphereShape())
+button.addComponentOrReplace(new Transform({
+    position: new Vector3(14.70, 1.34, 12.5),
+    rotation: new Quaternion(0, 1, 0, 1),
+    scale: new Vector3(0.05, 0.05, 0.05)}));
+button.addComponentOrReplace(new Material()).albedoColor = Color3.Red();
+engine.addEntity(button);
+
+const button2 = new Entity()
+button2.addComponent(new SphereShape())
+button2.addComponentOrReplace(new Transform({
+    position: new Vector3(14.70, 1.34, 9.5),
+    rotation: new Quaternion(0, 1, 0, 1),
+    scale: new Vector3(0.05, 0.05, 0.05)}));
+button2.addComponentOrReplace(new Material()).albedoColor = Color3.Red();
+engine.addEntity(button2);
+
+textEntity.addComponentOrReplace(new Transform({
+    position: new Vector3(14.64, 1.3, 13.5),
+    rotation: new Quaternion(0, 1, 0, 1),
+    scale: new Vector3(0.2, 0.2, 0.2)}));
+textEntity.addComponentOrReplace(myText);
+engine.addEntity(textEntity)
+
+
 const floorBasePebbles_01 = new Entity()
 floorBasePebbles_01.setParent(scene)
 const gltfShape = new GLTFShape('models/FloorBasePebbles_01/FloorBasePebbles_01.glb')
@@ -112,6 +144,7 @@ roofTexture.roughness = 1
 roofTexture.microSurface = 0.8
 
 let slotMachine = new SlotMachine(new Vector3(14.8, 1.2, 13), new Vector3(2, 2, 0.06), new Quaternion(0, -45,0,45));
+slotMachine.initCreditsText();
 let slotMachine2 = new SlotMachine(new Vector3(14.8, 1.2, 10), new Vector3(2, 2, 0.06), new Quaternion(0, -45,0,45));
 let slotMachine3 = new SlotMachine(new Vector3(14.8, 1.2, 7), new Vector3(2, 2, 0.06), new Quaternion(0, -45,0,45));
 let slotMachine4 = new SlotMachine(new Vector3(14.8, 1.2, 4), new Vector3(2, 2, 0.06), new Quaternion(0, -45,0,45));
@@ -154,6 +187,7 @@ wall5.addComponent(wallTexture);
 let roof = new Entity()
 roof.addComponent(new BoxShape());
 roof.addComponent(new Transform({position: new Vector3(8.75, 4.0, 8.1), scale: new Vector3(13.5, 0.2, 12.2), rotation: new Quaternion(0, 0, 0, 0)}))
+roof.addComponent(roofTexture);
 
 let ground = new Entity()
 ground.addComponent(new BoxShape());
@@ -204,7 +238,10 @@ engine.addEntity(roof);
 engine.addEntity(ground);
 engine.addEntity(door);
 
-input.subscribe("BUTTON_DOWN", ActionButton.POINTER, false, e => {
+// input.subscribe("BUTTON_DOWN", ActionButton.POINTER, false, e => {
+button.addComponentOrReplace(
+new OnPointerDown(e => {
+
     slotMachine.startGame();
 
 
@@ -249,4 +286,54 @@ input.subscribe("BUTTON_DOWN", ActionButton.POINTER, false, e => {
         source.playing = true
 
     })
-});
+}));
+
+
+button2.addComponentOrReplace(
+    new OnPointerDown(e => {
+
+        slotMachine2.startGame();
+
+
+        events.addListener(onRoundFinishEvent, null, () => {
+            const sound = new Entity()
+
+            // Create AudioClip object, holding sounds file
+            const clip = new AudioClip('sounds/stopSound.mp3')
+
+            // Create AudioSource component, referencing `clip`
+            const source = new AudioSource(clip)
+
+
+            // Add AudioSource component to entity
+            sound.addComponent(source)
+
+            engine.addEntity(sound);
+
+
+            // Play sound
+            source.playing = true
+
+        })
+
+        events.addListener(onRoundFinishEvent, null, () => {
+            const sound = new Entity()
+
+            // Create AudioClip object, holding sounds file
+            const clip = new AudioClip('sounds/stopSound.mp3')
+
+            // Create AudioSource component, referencing `clip`
+            const source = new AudioSource(clip)
+
+
+            // Add AudioSource component to entity
+            sound.addComponent(source)
+
+            engine.addEntity(sound);
+
+
+            // Play sound
+            source.playing = true
+
+        })
+    }));
