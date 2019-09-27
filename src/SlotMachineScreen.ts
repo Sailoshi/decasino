@@ -12,7 +12,7 @@ export class SlotMachine {
 
     private _metalTexture  = new Material();
 
-    private _backPlane = new Entity();
+    public _backPlane = new Entity();
     private _backgroundPlane = new Entity();
 
     private _topBlock = new Entity();
@@ -32,14 +32,17 @@ export class SlotMachine {
         this._metalTexture.microSurface = 0.8
         this._metalTexture.specularIntensity = 0.7
 
+        const backPlaneMaterial  = new Material();
+        backPlaneMaterial.albedoColor = Color3.Red();
+
         this._slotMachineScreen.addComponent(new Transform({position: position, rotation: rotation, scale: scale}))
 
-        this._backgroundPlane.addComponent(new PlaneShape());
-        this._backgroundPlane.addComponent(new Transform({position: new Vector3(0, 0.22, -0.02)})).scale.set(1, 0.415, 0);
-        this._backgroundPlane.addComponent(this._metalTexture);
+        // this._backgroundPlane.addComponent(new PlaneShape());
+        // this._backgroundPlane.addComponent(new Transform({position: new Vector3(0, 0.22, -0.02)})).scale.set(1, 0.415, 0);
+        // this._backgroundPlane.addComponent(backPlaneMaterial);
 
         this._backPlane.addComponent(new BoxShape());
-        this._backPlane.addComponent(new Transform({position: new Vector3(0, 0.22, -2)})).scale.set(1, 0.415, 0.06);
+        this._backPlane.addComponent(new Transform({position: new Vector3(0, 0.22, -0.05)})).scale.set(1, 0.415, 0.06);
         this._backPlane.addComponent(this._metalTexture);
 
         this._topBlock.addComponent(new BoxShape());
@@ -58,7 +61,7 @@ export class SlotMachine {
         this._leftBlock.addComponent(new Transform({position: new Vector3(0.4, 0.22, 0)})).scale.set(0.20, 0.3, 5);
         this._leftBlock.addComponent(this._metalTexture);
 
-        this._backgroundPlane.setParent(this._slotMachineScreen);
+        // this._backgroundPlane.setParent(this._slotMachineScreen);
         this._backPlane.setParent(this._slotMachineScreen);
         this._topBlock.setParent(this._slotMachineScreen);
         this._rightBlock.setParent(this._slotMachineScreen);
@@ -68,8 +71,12 @@ export class SlotMachine {
         this._spinningBlocks = new SpinBlock(this._slotMachineScreen);
     }
 
-    public initCreditsText() {
-        this._spinningBlocks.initText();
+    public initCreditsText(credits: number) {
+        this._spinningBlocks.initText(credits);
+    }
+
+    public addCredits(credits: number) {
+        this._spinningBlocks.addCredits(credits);
     }
 
     public setPosition(position: Vector3) {

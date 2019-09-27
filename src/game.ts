@@ -6,6 +6,79 @@ import utils from "../node_modules/decentraland-ecs-utils/index"
 const input = Input.instance;
 
 
+const  floorTexture  = new Material();
+floorTexture.albedoTexture = new Texture("materials/casinoFloor.png");
+floorTexture.alphaTexture = new Texture("materials/casinoFloor.png");
+floorTexture.roughness = 1
+floorTexture.microSurface = 0.8
+
+const  wallTexture  = new Material();
+wallTexture.albedoTexture = new Texture("materials/casinoWall.png");
+wallTexture.alphaTexture = new Texture("materials/casinoWall.png");
+wallTexture.roughness = 1
+wallTexture.microSurface = 0.8
+
+const  wallTextureTop  = new Material();
+wallTextureTop.albedoColor = Color3.Black();
+wallTextureTop.roughness = 1
+wallTextureTop.microSurface = 0.8
+
+const  roofTexture  = new Material();
+roofTexture.albedoTexture = new Texture("materials/metalTexture.png");
+roofTexture.roughness = 1
+roofTexture.microSurface = 0.8
+
+// create canvas
+const canvas = new UICanvas()
+// create container inside canvas
+const rect = new UIContainerRect(canvas)
+rect.adaptHeight = true
+rect.adaptWidth = true
+rect.hAlign = 'left'
+rect.vAlign = 'top'
+rect.opacity = 0.8
+
+const factTxt = new UIText(rect)
+factTxt.outlineColor = new Color4(0.7, 1, 0.8, 1)
+factTxt.value = 'WELCOME to the Tivoli Casino World, purchase mana to start playing!'
+factTxt.fontSize = 22
+factTxt.width = 500
+factTxt.height = 205
+factTxt.positionX = 455
+factTxt.positionY = 0
+factTxt.color = new Color4(0.7, 1, 0.8, 1)
+factTxt.textWrapping = true
+
+const manaPurchaseBlock = new Entity();
+manaPurchaseBlock.addComponent(new BoxShape())
+manaPurchaseBlock.addComponent(new Transform({position: new Vector3(12, 0, 8), scale: new Vector3(1, 6, 1)}))
+engine.addEntity(manaPurchaseBlock);
+manaPurchaseBlock.addComponent(roofTexture);
+const purchaseText = new TextShape("Purchase 1000 Mana")
+purchaseText.fontSize = 4
+purchaseText.color = Color3.White()
+
+let purchaseEntity = new Entity();
+
+purchaseEntity.addComponentOrReplace(new Transform({
+    position: new Vector3(11.49, 1.7, 8),
+    rotation: new Quaternion(0, 1, 0, 1),
+    scale: new Vector3(0.2, 0.2, 0.2)}));
+purchaseEntity.addComponentOrReplace(purchaseText);
+
+engine.addEntity(purchaseEntity);
+
+// let sunUITexture = new Texture("materials/1.png")
+// const sunImgScreen = new UIImage(rect, sunUITexture)
+// sunImgScreen.hAlign = 'left'
+// sunImgScreen.vAlign = 'top'
+// sunImgScreen.sourceLeft = 0
+// sunImgScreen.sourceTop = 0
+// sunImgScreen.sourceWidth = 1024
+// sunImgScreen.sourceHeight = 483
+// sunImgScreen.width = 1024
+// sunImgScreen.height = 512
+
 const scene = new Entity()
 const transform = new Transform({
     position: new Vector3(0, 0, 0),
@@ -30,6 +103,12 @@ button.addComponentOrReplace(new Transform({
 button.addComponentOrReplace(new Material()).albedoColor = Color3.Red();
 engine.addEntity(button);
 
+manaPurchaseBlock.addComponentOrReplace(
+    new OnPointerDown(e => {
+        slotMachine.addCredits(1000);
+        factTxt.visible = false;
+    }));
+
 const button2 = new Entity()
 button2.addComponent(new SphereShape())
 button2.addComponentOrReplace(new Transform({
@@ -38,6 +117,24 @@ button2.addComponentOrReplace(new Transform({
     scale: new Vector3(0.05, 0.05, 0.05)}));
 button2.addComponentOrReplace(new Material()).albedoColor = Color3.Red();
 engine.addEntity(button2);
+
+const button3 = new Entity()
+button3.addComponent(new SphereShape())
+button3.addComponentOrReplace(new Transform({
+    position: new Vector3(14.70, 1.34, 6.5),
+    rotation: new Quaternion(0, 1, 0, 1),
+    scale: new Vector3(0.05, 0.05, 0.05)}));
+button3.addComponentOrReplace(new Material()).albedoColor = Color3.Red();
+engine.addEntity(button3);
+
+const button4 = new Entity()
+button4.addComponent(new SphereShape())
+button4.addComponentOrReplace(new Transform({
+    position: new Vector3(14.70, 1.34, 3.5),
+    rotation: new Quaternion(0, 1, 0, 1),
+    scale: new Vector3(0.05, 0.05, 0.05)}));
+button4.addComponentOrReplace(new Material()).albedoColor = Color3.Red();
+engine.addEntity(button4);
 
 textEntity.addComponentOrReplace(new Transform({
     position: new Vector3(14.64, 1.3, 13.5),
@@ -112,7 +209,7 @@ floorBlock_01.setParent(scene)
 const gltfShape_5 = new GLTFShape('models/FloorBlock_01/FloorBlock_01.glb')
 floorBlock_01.addComponentOrReplace(gltfShape_5)
 const transform_7 = new Transform({
-    position: new Vector3(13.5, 0, 3.5),
+    position: new Vector3(1.7, 0, 7.1),
     rotation: new Quaternion(0, 0, 0, 1),
     scale: new Vector3(1, 1, 1)
 })
@@ -120,31 +217,10 @@ floorBlock_01.addComponentOrReplace(transform_7)
 engine.addEntity(floorBlock_01)
 
 
-const  floorTexture  = new Material();
-floorTexture.albedoTexture = new Texture("materials/casinoFloor.png");
-floorTexture.alphaTexture = new Texture("materials/casinoFloor.png");
-floorTexture.roughness = 1
-floorTexture.microSurface = 0.8
 
-const  wallTexture  = new Material();
-wallTexture.albedoTexture = new Texture("materials/casinoWall.png");
-wallTexture.alphaTexture = new Texture("materials/casinoWall.png");
-wallTexture.roughness = 1
-wallTexture.microSurface = 0.8
-
-const  wallTextureTop  = new Material();
-wallTextureTop.albedoColor = Color3.Black();
-wallTextureTop.roughness = 1
-wallTextureTop.microSurface = 0.8
-
-const  roofTexture  = new Material();
-roofTexture.albedoTexture = new Texture("materials/metalTexture.png");
-roofTexture.alphaTexture = new Texture("materials/metalTexture.png");
-roofTexture.roughness = 1
-roofTexture.microSurface = 0.8
 
 let slotMachine = new SlotMachine(new Vector3(14.8, 1.2, 13), new Vector3(2, 2, 0.06), new Quaternion(0, -45,0,45));
-slotMachine.initCreditsText();
+slotMachine.initCreditsText(0);
 let slotMachine2 = new SlotMachine(new Vector3(14.8, 1.2, 10), new Vector3(2, 2, 0.06), new Quaternion(0, -45,0,45));
 let slotMachine3 = new SlotMachine(new Vector3(14.8, 1.2, 7), new Vector3(2, 2, 0.06), new Quaternion(0, -45,0,45));
 let slotMachine4 = new SlotMachine(new Vector3(14.8, 1.2, 4), new Vector3(2, 2, 0.06), new Quaternion(0, -45,0,45));
@@ -199,7 +275,7 @@ let closedPos: Quaternion = Quaternion.Euler(0, 0, 0)
 
 const doorPivot = new Entity()
 doorPivot.addComponent(new Transform({
-    position: new Vector3(2.5, 1.2, 6.1),
+    position: new Vector3(2.65, 1.2, 6.1),
     rotation: closedPos
 }))
 
@@ -239,11 +315,57 @@ engine.addEntity(ground);
 engine.addEntity(door);
 
 // input.subscribe("BUTTON_DOWN", ActionButton.POINTER, false, e => {
-button.addComponentOrReplace(
-new OnPointerDown(e => {
+
+var startGameEvent = new OnPointerDown(e => {
 
     slotMachine.startGame();
 
+    events.addListener(onRoundFinishEvent, null, () => {
+        const sound = new Entity()
+
+        // Create AudioClip object, holding sounds file
+        const clip = new AudioClip('sounds/stopSound.mp3')
+
+        // Create AudioSource component, referencing `clip`
+        const source = new AudioSource(clip)
+
+
+        // Add AudioSource component to entity
+        sound.addComponent(source)
+
+        engine.addEntity(sound);
+
+
+        // Play sound
+        source.playing = true
+
+    })
+
+    events.addListener(onRoundFinishEvent, null, () => {
+        const sound = new Entity()
+
+        // Create AudioClip object, holding sounds file
+        const clip = new AudioClip('sounds/stopSound.mp3')
+
+        // Create AudioSource component, referencing `clip`
+        const source = new AudioSource(clip)
+
+
+        // Add AudioSource component to entity
+        sound.addComponent(source)
+
+        engine.addEntity(sound);
+
+
+        // Play sound
+        source.playing = true
+
+    })
+})
+
+var startGameEvent2 = new OnPointerDown(e => {
+
+    slotMachine2.startGame();
 
     events.addListener(onRoundFinishEvent, null, () => {
         const sound = new Entity()
@@ -286,54 +408,110 @@ new OnPointerDown(e => {
         source.playing = true
 
     })
-}));
+});
+
+var startGameEvent3 = new OnPointerDown(e => {
+
+    slotMachine3.startGame();
+
+    events.addListener(onRoundFinishEvent, null, () => {
+        const sound = new Entity()
+
+        // Create AudioClip object, holding sounds file
+        const clip = new AudioClip('sounds/stopSound.mp3')
+
+        // Create AudioSource component, referencing `clip`
+        const source = new AudioSource(clip)
 
 
-button2.addComponentOrReplace(
-    new OnPointerDown(e => {
+        // Add AudioSource component to entity
+        sound.addComponent(source)
 
-        slotMachine2.startGame();
-
-
-        events.addListener(onRoundFinishEvent, null, () => {
-            const sound = new Entity()
-
-            // Create AudioClip object, holding sounds file
-            const clip = new AudioClip('sounds/stopSound.mp3')
-
-            // Create AudioSource component, referencing `clip`
-            const source = new AudioSource(clip)
+        engine.addEntity(sound);
 
 
-            // Add AudioSource component to entity
-            sound.addComponent(source)
+        // Play sound
+        source.playing = true
 
-            engine.addEntity(sound);
+    })
 
+    events.addListener(onRoundFinishEvent, null, () => {
+        const sound = new Entity()
 
-            // Play sound
-            source.playing = true
+        // Create AudioClip object, holding sounds file
+        const clip = new AudioClip('sounds/stopSound.mp3')
 
-        })
-
-        events.addListener(onRoundFinishEvent, null, () => {
-            const sound = new Entity()
-
-            // Create AudioClip object, holding sounds file
-            const clip = new AudioClip('sounds/stopSound.mp3')
-
-            // Create AudioSource component, referencing `clip`
-            const source = new AudioSource(clip)
+        // Create AudioSource component, referencing `clip`
+        const source = new AudioSource(clip)
 
 
-            // Add AudioSource component to entity
-            sound.addComponent(source)
+        // Add AudioSource component to entity
+        sound.addComponent(source)
 
-            engine.addEntity(sound);
+        engine.addEntity(sound);
 
 
-            // Play sound
-            source.playing = true
+        // Play sound
+        source.playing = true
 
-        })
-    }));
+    })
+});
+
+var startGameEvent4 = new OnPointerDown(e => {
+
+    slotMachine4.startGame();
+
+    events.addListener(onRoundFinishEvent, null, () => {
+        const sound = new Entity()
+
+        // Create AudioClip object, holding sounds file
+        const clip = new AudioClip('sounds/stopSound.mp3')
+
+        // Create AudioSource component, referencing `clip`
+        const source = new AudioSource(clip)
+
+
+        // Add AudioSource component to entity
+        sound.addComponent(source)
+
+        engine.addEntity(sound);
+
+
+        // Play sound
+        source.playing = true
+
+    })
+
+    events.addListener(onRoundFinishEvent, null, () => {
+        const sound = new Entity()
+
+        // Create AudioClip object, holding sounds file
+        const clip = new AudioClip('sounds/stopSound.mp3')
+
+        // Create AudioSource component, referencing `clip`
+        const source = new AudioSource(clip)
+
+
+        // Add AudioSource component to entity
+        sound.addComponent(source)
+
+        engine.addEntity(sound);
+
+
+        // Play sound
+        source.playing = true
+
+    })
+});
+
+slotMachine._backPlane.addComponentOrReplace(startGameEvent);
+button.addComponentOrReplace(startGameEvent);
+
+slotMachine2._backPlane.addComponentOrReplace(startGameEvent2);
+button2.addComponentOrReplace(startGameEvent2);
+
+slotMachine3._backPlane.addComponentOrReplace(startGameEvent3);
+button3.addComponentOrReplace(startGameEvent3);
+
+slotMachine4._backPlane.addComponentOrReplace(startGameEvent4);
+button4.addComponentOrReplace(startGameEvent4);

@@ -8,10 +8,22 @@ export class onRoundFinishEvent {
 
 export class SpinBlock extends Entity {
 
-    private _currentCredits = 1000;
+    private _currentCredits = 0;
     private _creditsEntity;
 
-    public initText() {
+    public addCredits(credits: number) {
+        if (this._currentCredits + credits > 10000) {
+            return;
+        }
+        this._currentCredits += credits;
+        this._creditsEntity.getComponent(TextShape).value = this._currentCredits;
+    }
+
+    public initText(creditsNumber: number) {
+        if (creditsNumber > 0) {
+            this._currentCredits = creditsNumber;
+        }
+
         this._creditsEntity = new Entity();
         const credits = new TextShape(this._currentCredits.toString())
         credits.fontSize = 2
@@ -79,24 +91,24 @@ export class SpinBlock extends Entity {
 
             if (this._secondSpinBlock_1.getComponent(SlotMachineStateSystem).slotIcon == this._secondSpinBlock_2.getComponent(SlotMachineStateSystem).slotIcon && this._secondSpinBlock_2.getComponent(SlotMachineStateSystem).slotIcon == this._secondSpinBlock_3.getComponent(SlotMachineStateSystem).slotIcon) {
                 won = true;
-                this._currentCredits += 100;
+                this.addCredits(100);
             }
 
             if (this._thirdSpinBlock_1.getComponent(SlotMachineStateSystem).slotIcon == this._thirdSpinBlock_2.getComponent(SlotMachineStateSystem).slotIcon && this._thirdSpinBlock_2.getComponent(SlotMachineStateSystem).slotIcon == this._thirdSpinBlock_3.getComponent(SlotMachineStateSystem).slotIcon) {
                 won = true;
-                this._currentCredits += 100;
+                this.addCredits(100);
             }
             if (this._fourthSpinBlock1.getComponent(SlotMachineStateSystem).slotIcon == this._fourthSpinBlock2.getComponent(SlotMachineStateSystem).slotIcon && this._fourthSpinBlock2.getComponent(SlotMachineStateSystem).slotIcon == this._fourthSpinBlock3.getComponent(SlotMachineStateSystem).slotIcon) {
                 won = true;
-                this._currentCredits += 100;
+                this.addCredits(100);
             }
             if (this._secondSpinBlock_1.getComponent(SlotMachineStateSystem).slotIcon == this._thirdSpinBlock_2.getComponent(SlotMachineStateSystem).slotIcon && this._thirdSpinBlock_2.getComponent(SlotMachineStateSystem).slotIcon == this._fourthSpinBlock3.getComponent(SlotMachineStateSystem).slotIcon) {
                 won = true;
-                this._currentCredits += 100;
+                this.addCredits(100);
             }
             if (this._fourthSpinBlock1.getComponent(SlotMachineStateSystem).slotIcon == this._thirdSpinBlock_2.getComponent(SlotMachineStateSystem).slotIcon && this._thirdSpinBlock_2.getComponent(SlotMachineStateSystem).slotIcon == this._secondSpinBlock_3.getComponent(SlotMachineStateSystem).slotIcon) {
                 won = true;
-                this._currentCredits += 100;
+                this.addCredits(100);
             }
 
             if (won) {
