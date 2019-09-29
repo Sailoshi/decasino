@@ -1,6 +1,6 @@
 import {events, onSpinBlockFinishEvent, SlotMachineStateSystem, SlotMachineSystem} from "./SlotMachineStateSystem";
 import {getMaterialInstance, SpinTexture} from "./SlotMaterials";
-import {cashSoundSource, rect, source, source2, winningSoundSource} from "./game";
+import {cashSoundSource, rect, startSound, spinningSound, winningSoundSource, stopSoundSource} from "./game";
 
 @EventConstructor()
 export class onRoundFinishEvent {
@@ -91,8 +91,8 @@ export class SpinBlock extends Entity {
 
 
             // Play sound
-            source.playOnce();
-            source2.playOnce();
+            startSound.playOnce();
+            spinningSound.playOnce();
             if (this._creditsEntity) {
                 this._currentCredits -= 50;
                 this._creditsEntity.getComponent(TextShape).value = this._currentCredits;
@@ -373,19 +373,6 @@ export class SpinBlock extends Entity {
 
     private stopSoundCallback(): void {
 
-        const stopSound = new Entity()
-
-        // Create AudioClip object, holding sounds file
-        const clip = new AudioClip('sounds/stopSound.mp3')
-
-        // Create AudioSource component, referencing `clip`
-        const stopSoundSource = new AudioSource(clip)
-
-
-        // Add AudioSource component to entity
-        stopSound.addComponent(stopSoundSource)
-        stopSound.addComponent(new Transform({position: new Vector3(10, 1, 8)}))
-        engine.addEntity(stopSound);
 
 
         // Play sound
@@ -511,12 +498,12 @@ export class SpinBlock extends Entity {
         engine.addSystem(new SlotMachineSystem(this._firstSpinBlock_1, 3));
         engine.addSystem(new SlotMachineSystem(this._secondSpinBlock_1, 3))
         engine.addSystem(new SlotMachineSystem(this._thirdSpinBlock_1, 3))
-        engine.addSystem(new SlotMachineSystem(this._fourthSpinBlock1, 3, this.stopSoundCallback))
+        engine.addSystem(new SlotMachineSystem(this._fourthSpinBlock1, 3, null, this.stopSoundCallback))
 
         engine.addSystem(new SlotMachineSystem(this._firstSpinBlock_2, 4))
         engine.addSystem(new SlotMachineSystem(this._secondSpinBlock_2, 4))
         engine.addSystem(new SlotMachineSystem(this._thirdSpinBlock_2, 4))
-        engine.addSystem(new SlotMachineSystem(this._fourthSpinBlock2, 4, this.stopSoundCallback))
+        engine.addSystem(new SlotMachineSystem(this._fourthSpinBlock2, 4, null, this.stopSoundCallback))
 
         engine.addSystem(new SlotMachineSystem(this._firstSpinBlock_3, 5))
         engine.addSystem(new SlotMachineSystem(this._secondSpinBlock_3, 5))

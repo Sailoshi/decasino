@@ -5,6 +5,21 @@ import utils from "../node_modules/decentraland-ecs-utils/index"
 
 const input = Input.instance;
 
+const stopSound = new Entity()
+
+// Create AudioClip object, holding sounds file
+const clip = new AudioClip('sounds/stopSound.mp3')
+
+// Create AudioSource component, referencing `clip`
+export const stopSoundSource = new AudioSource(clip)
+
+
+// Add AudioSource component to entity
+stopSound.addComponent(stopSoundSource)
+stopSound.addComponent(new Transform({position: new Vector3(10, 1, 8)}))
+engine.addEntity(stopSound);
+
+
 
 const  floorTexture  = new Material();
 floorTexture.albedoTexture = new Texture("materials/casinoFloor.png");
@@ -368,13 +383,13 @@ const sound2 = new Entity()
 const clip = new AudioClip('sounds/startSound.wav')
 const clip2 = new AudioClip('sounds/spinningSound.mp3')
 // Create AudioSource component, referencing `clip`
-export const source = new AudioSource(clip)
-export const source2 = new AudioSource(clip2)
+export const startSound = new AudioSource(clip)
+export const spinningSound = new AudioSource(clip2)
 
 // Add AudioSource component to entity
-sound.addComponent(source)
+sound.addComponent(startSound)
 sound.addComponent(new Transform({position: new Vector3(10, 1, 8)}))
-sound2.addComponent(source2)
+sound2.addComponent(spinningSound)
 sound2.addComponent(new Transform({position: new Vector3(10, 1, 8)}))
 engine.addEntity(sound);
 engine.addEntity(sound2);
@@ -466,45 +481,11 @@ var startGameEvent = new OnPointerDown(e => {
     }
     slotMachine.startGame();
 
-    events.addListener(onRoundFinishEvent, null, () => {
-        const sound = new Entity()
-
-        // Create AudioClip object, holding sounds file
-        const clip = new AudioClip('sounds/stopSound.mp3')
-
-        // Create AudioSource component, referencing `clip`
-        const source = new AudioSource(clip)
-
-
-        // Add AudioSource component to entity
-        sound.addComponent(source)
-        sound.addComponent(new Transform({position: new Vector3(10, 1, 8)}))
-        engine.addEntity(sound);
-
-
-        // Play sound
-        source.playOnce();
-
-    })
 
     events.addListener(onRoundFinishEvent, null, () => {
-        const sound = new Entity()
-
-        // Create AudioClip object, holding sounds file
-        const clip = new AudioClip('sounds/stopSound.mp3')
-
-        // Create AudioSource component, referencing `clip`
-        const source = new AudioSource(clip)
-
-
-        // Add AudioSource component to entity
-        sound.addComponent(source)
-
-        engine.addEntity(sound);
-
 
         // Play sound
-        source.playOnce();
+        stopSoundSource.playOnce();
 
     })
 })
@@ -513,45 +494,12 @@ var startGameEvent2 = new OnPointerDown(e => {
 
     slotMachine2.startGame();
 
+
     events.addListener(onRoundFinishEvent, null, () => {
-        const sound = new Entity()
-
-        // Create AudioClip object, holding sounds file
-        const clip = new AudioClip('sounds/stopSound.mp3')
-
-        // Create AudioSource component, referencing `clip`
-        const source = new AudioSource(clip)
-
-
-        // Add AudioSource component to entity
-        sound.addComponent(source)
-
-        engine.addEntity(sound);
 
 
         // Play sound
-        source.playOnce();
-
-    })
-
-    events.addListener(onRoundFinishEvent, null, () => {
-        const sound = new Entity()
-
-        // Create AudioClip object, holding sounds file
-        const clip = new AudioClip('sounds/stopSound.mp3')
-
-        // Create AudioSource component, referencing `clip`
-        const source = new AudioSource(clip)
-
-
-        // Add AudioSource component to entity
-        sound.addComponent(source)
-
-        engine.addEntity(sound);
-
-
-        // Play sound
-        source.playOnce();
+        stopSoundSource.playOnce();
 
     })
 });
@@ -560,45 +508,11 @@ var startGameEvent3 = new OnPointerDown(e => {
 
     slotMachine3.startGame();
 
-    events.addListener(onRoundFinishEvent, null, () => {
-        const sound = new Entity()
-
-        // Create AudioClip object, holding sounds file
-        const clip = new AudioClip('sounds/stopSound.mp3')
-
-        // Create AudioSource component, referencing `clip`
-        const source = new AudioSource(clip)
-
-
-        // Add AudioSource component to entity
-        sound.addComponent(source)
-
-        engine.addEntity(sound);
-
-
-        // Play sound
-        source.playOnce();
-
-    })
 
     events.addListener(onRoundFinishEvent, null, () => {
-        const sound = new Entity()
-
-        // Create AudioClip object, holding sounds file
-        const clip = new AudioClip('sounds/stopSound.mp3')
-
-        // Create AudioSource component, referencing `clip`
-        const source = new AudioSource(clip)
-
-
-        // Add AudioSource component to entity
-        sound.addComponent(source)
-
-        engine.addEntity(sound);
-
 
         // Play sound
-        source.playOnce();
+        stopSoundSource.playOnce();
 
     })
 });
@@ -607,45 +521,13 @@ var startGameEvent4 = new OnPointerDown(e => {
 
     slotMachine4.startGame();
 
+
+
     events.addListener(onRoundFinishEvent, null, () => {
-        const sound = new Entity()
-
-        // Create AudioClip object, holding sounds file
-        const clip = new AudioClip('sounds/stopSound.mp3')
-
-        // Create AudioSource component, referencing `clip`
-        const source = new AudioSource(clip)
-
-
-        // Add AudioSource component to entity
-        sound.addComponent(source)
-
-        engine.addEntity(sound);
 
 
         // Play sound
-        source.playOnce();
-
-    })
-
-    events.addListener(onRoundFinishEvent, null, () => {
-        const sound = new Entity()
-
-        // Create AudioClip object, holding sounds file
-        const clip = new AudioClip('sounds/stopSound.mp3')
-
-        // Create AudioSource component, referencing `clip`
-        const source = new AudioSource(clip)
-
-
-        // Add AudioSource component to entity
-        sound.addComponent(source)
-        sound.addComponent(new Transform({position: new Vector3(10, 1, 8)}))
-        engine.addEntity(sound);
-
-
-        // Play sound
-        source.playOnce()
+        stopSoundSource.playOnce()
 
     })
 });

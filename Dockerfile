@@ -14,7 +14,7 @@ RUN npm install
 # If you are building your code for production
 # RUN npm install --only=production
 
-# Bundle app source
+# Bundle app startSound
 COPY . .
 
 EXPOSE 8000

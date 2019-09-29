@@ -1,4 +1,5 @@
 import {materialsArray, SpinTexture} from "./SlotMaterials";
+import {stopSoundSource} from "./game";
 
 
  export const events = new EventManager();
@@ -24,8 +25,9 @@ export class SlotMachineSystem implements ISystem {
     private _transform;
     private _material;
     private _onRoundFinishedCallback;
+    private _stopSoundFinished;
 
-    constructor(cubeComponent: Entity, rounds: number = 5, onRoundFinishedCallback: () => void = null){
+    constructor(cubeComponent: Entity, rounds: number = 5, onRoundFinishedCallback: () => void = null, stopSoundFinished: () => void = null){
         this._cube = cubeComponent
         this._startPosition = this._cube.getComponent(Transform).position;
         this._transform = this._cube.getComponent(Transform)
@@ -34,6 +36,7 @@ export class SlotMachineSystem implements ISystem {
         this._stopPosition = this._endPosition;
         this._maxMovement = this._rounds * 4 * this._transform.scale.y;
         this._onRoundFinishedCallback = onRoundFinishedCallback;
+        this._stopSoundFinished = stopSoundFinished;
         this._rounds = rounds;
     }
 
@@ -48,14 +51,12 @@ export class SlotMachineSystem implements ISystem {
     private _maxMovement = 0
     private _movementCounter = 0;
 
-
     private _endPosition;
     private _stopPosition;
 
     update(dt: number) {
         let lerp = this._cube.getComponent(SlotMachineStateSystem);
         if (lerp.startGame) {
-
             if ((this._movementCounter * 100) / this._maxMovement >= 1 && (this._movementCounter * 100) / this._maxMovement <= 10 && this._velocity <= this._maxSpeed) {
                 this._velocity *= 1.3;
             }
@@ -65,10 +66,12 @@ export class SlotMachineSystem implements ISystem {
             }
 
             if (this._counter == this._rounds && (this._movementCounter * 100) / this._maxMovement >= 99.85 && this._velocity <= this._maxSpeed) {
+
                 if (this._onRoundFinishedCallback) {
                     this._onRoundFinishedCallback();
                 }
             }
+
 
             let diff = Math.abs(this._transform.position.y - this._endPosition.y);
             let step = (diff - this._velocity) >= 0 ? this._velocity : diff % this._velocity;
@@ -78,7 +81,7 @@ export class SlotMachineSystem implements ISystem {
             }
 
             this._transform.position = this._transform.position.add(new Vector3(0, -step, 0));
-            this._movementCounter += Math.abs(step + this._delta);
+            this._movementCounter += Math.abs(step + Math.abs(this._delta));
 
             if (this._transform.position.y - this._endPosition.y <= 0) {
                 if (this._counter < this._rounds) {
@@ -93,11 +96,15 @@ export class SlotMachineSystem implements ISystem {
                     this._transform.position = this._transform.position.set(this._startPosition.x, 0.415 - this._delta, this._startPosition.z);
                     this._counter++;
                 } else {
+
                     this._transform.position.set(this._startPosition.x, this._startPosition.y, this._startPosition.z)
 
                     this._counter = 0;
                     this._endPosition = this._stopPosition;
                     lerp.startGame = false;
+                    if (this._stopSoundFinished) {
+                        stopSoundSource.playOnce();
+                    }
                     this._velocity = 0.033333* this._minSpeed;
                     this._movementCounter = 0;
                 }
@@ -105,6 +112,12 @@ export class SlotMachineSystem implements ISystem {
 
             if (this._rounds == this._counter) {
                 this._endPosition = this._startPosition;
+            }
+
+            if (this._movementCounter >= this._maxMovement) {
+                if (this._stopSoundFinished) {
+                    this._stopSoundFinished();
+                }
             }
         }
     }
