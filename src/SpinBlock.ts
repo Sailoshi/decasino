@@ -1,9 +1,49 @@
 import {events, onSpinBlockFinishEvent, SlotMachineStateSystem, SlotMachineSystem} from "./SlotMachineStateSystem";
 import {getMaterialInstance, SpinTexture} from "./SlotMaterials";
+import {rect} from "./game";
 
 @EventConstructor()
 export class onRoundFinishEvent {
     constructor() {}
+}
+
+export class TimeSystem implements ISystem {
+    public functionCall: () => void;
+    public start: boolean = false;
+    public timeDelayed = 0;
+    update(dt: number) {
+        if (this.start) {
+            this.timeDelayed += dt;
+
+            if (this.timeDelayed > 3.5) {
+                this.timeDelayed = 0;
+                this.start = false;
+                this.functionCall();
+            }
+        }
+    }
+}
+
+export class TextSystem implements ISystem {
+
+    public start: boolean = false;
+    public textComponent: UIText;
+
+    public timeDelayed = 0;
+    update(dt: number) {
+        if (this.start) {
+            this.timeDelayed += dt;
+
+            this.textComponent.visible = true;
+
+            if (this.timeDelayed > 3.5) {
+                this.timeDelayed = 0;
+                this.start = false;
+
+                this.textComponent.visible = false
+            }
+        }
+    }
 }
 
 export class SpinBlock extends Entity {
@@ -38,12 +78,15 @@ export class SpinBlock extends Entity {
 
         engine.addEntity(this._creditsEntity)
     }
-
+    public _won = false;
+    public _gameStarted = false;
     public startGame() {
         if (this._currentCredits <= 0 && this._creditsEntity) {
             this._currentCredits = 0;
             return;
         }
+
+        this._gameStarted = true;
         if (!this._firstSpinBlock_2.getComponent(SlotMachineStateSystem).startGame) {
             const sound = new Entity()
             const sound2 = new Entity()
@@ -56,7 +99,9 @@ export class SpinBlock extends Entity {
 
             // Add AudioSource component to entity
             sound.addComponent(source)
+            sound.addComponent(new Transform({position: new Vector3(10, 1, 8)}))
             sound2.addComponent(source2)
+            sound2.addComponent(new Transform({position: new Vector3(10, 1, 8)}))
             engine.addEntity(sound);
             engine.addEntity(sound2);
 
@@ -82,54 +127,167 @@ export class SpinBlock extends Entity {
         this._thirdSpinBlock_3.getComponent(SlotMachineStateSystem).startGame = true;
         this._fourthSpinBlock3.getComponent(SlotMachineStateSystem).startGame = true;
 
+        const delayTimer = new TimeSystem();
+        const textSystem = new TextSystem();
 
+        const factTxt = new UIText(rect)
 
+        factTxt.outlineColor = new Color4(0.7, 1, 0.8, 1)
+        factTxt.value = 'Yeah, you have won 100 Mana'
+        factTxt.fontSize = 50
+        factTxt.width = 500
+        factTxt.visible = false;
+        factTxt.hTextAlign = "center";
+        factTxt.height = 800
+        factTxt.outlineColor = Color4.Green();
+        factTxt.positionX = 500
+        factTxt.positionY = 50
+        factTxt.color = new Color4(0.7, 1, 0.8, 1)
+        factTxt.textWrapping = true
+
+        this._secondSpinBlock_1.getComponent(Material).emissiveColor = null;
+        this._secondSpinBlock_2.getComponent(Material).emissiveColor = null;
+        this._secondSpinBlock_3.getComponent(Material).emissiveColor = null;
+        this._thirdSpinBlock_1.getComponent(Material).emissiveColor = null;
+        this._thirdSpinBlock_2.getComponent(Material).emissiveColor = null;
+        this._thirdSpinBlock_3.getComponent(Material).emissiveColor = null;
+        this._fourthSpinBlock1.getComponent(Material).emissiveColor = null;
+        this._fourthSpinBlock2.getComponent(Material).emissiveColor = null;
+        this._fourthSpinBlock3.getComponent(Material).emissiveColor = null;
+
+        textSystem.textComponent = factTxt;
+
+        engine.addSystem(delayTimer)
 
         events.addListener(onSpinBlockFinishEvent, null, () => {
             events.fireEvent(new onRoundFinishEvent())
-            let won = false;
+
 
             if (this._secondSpinBlock_1.getComponent(SlotMachineStateSystem).slotIcon == this._secondSpinBlock_2.getComponent(SlotMachineStateSystem).slotIcon && this._secondSpinBlock_2.getComponent(SlotMachineStateSystem).slotIcon == this._secondSpinBlock_3.getComponent(SlotMachineStateSystem).slotIcon) {
-                won = true;
+                this._won = true;
+                playWinningSound();
+                this._secondSpinBlock_1.getComponent(Material).emissiveColor = Color3.Green();
+                this._secondSpinBlock_2.getComponent(Material).emissiveColor = Color3.Green();
+                this._secondSpinBlock_3.getComponent(Material).emissiveColor = Color3.Green();
+                factTxt.visible  = true;
+
+                delayTimer.functionCall = () => {
+                    this._secondSpinBlock_1.getComponent(Material).emissiveColor = null;
+                    this._secondSpinBlock_2.getComponent(Material).emissiveColor = null;
+                    this._secondSpinBlock_3.getComponent(Material).emissiveColor = null;
+                    factTxt.visible  = false;
+                    this._won = false;
+                }
+
+                delayTimer.start = true;
+
                 this.addCredits(100);
             }
 
             if (this._thirdSpinBlock_1.getComponent(SlotMachineStateSystem).slotIcon == this._thirdSpinBlock_2.getComponent(SlotMachineStateSystem).slotIcon && this._thirdSpinBlock_2.getComponent(SlotMachineStateSystem).slotIcon == this._thirdSpinBlock_3.getComponent(SlotMachineStateSystem).slotIcon) {
-                won = true;
+                this._won = true;
+                playWinningSound();
+                this._thirdSpinBlock_1.getComponent(Material).emissiveColor = Color3.Green();
+                this._thirdSpinBlock_2.getComponent(Material).emissiveColor = Color3.Green();
+                this._thirdSpinBlock_3.getComponent(Material).emissiveColor = Color3.Green();
+                factTxt.visible  = true;
+
+                delayTimer.functionCall = () => {
+                    this._thirdSpinBlock_1.getComponent(Material).emissiveColor = null;
+                    this._thirdSpinBlock_2.getComponent(Material).emissiveColor = null;
+                    this._thirdSpinBlock_3.getComponent(Material).emissiveColor = null;
+                    factTxt.visible  = false;
+                    this._won = false;
+                }
+
+                delayTimer.start = true;
+
                 this.addCredits(100);
             }
             if (this._fourthSpinBlock1.getComponent(SlotMachineStateSystem).slotIcon == this._fourthSpinBlock2.getComponent(SlotMachineStateSystem).slotIcon && this._fourthSpinBlock2.getComponent(SlotMachineStateSystem).slotIcon == this._fourthSpinBlock3.getComponent(SlotMachineStateSystem).slotIcon) {
-                won = true;
+                this._won = true;
+                playWinningSound();
+                this._fourthSpinBlock1.getComponent(Material).emissiveColor = Color3.Green();
+                this._fourthSpinBlock2.getComponent(Material).emissiveColor = Color3.Green();
+                this._fourthSpinBlock3.getComponent(Material).emissiveColor = Color3.Green();
+                factTxt.visible  = true;
+
+                delayTimer.functionCall = () => {
+                    this._fourthSpinBlock1.getComponent(Material).emissiveColor = null;
+                    this._fourthSpinBlock2.getComponent(Material).emissiveColor = null;
+                    this._fourthSpinBlock3.getComponent(Material).emissiveColor = null;
+                    factTxt.visible  = false;
+                    this._won = false;
+                }
+
+                delayTimer.start = true;
+
                 this.addCredits(100);
             }
             if (this._secondSpinBlock_1.getComponent(SlotMachineStateSystem).slotIcon == this._thirdSpinBlock_2.getComponent(SlotMachineStateSystem).slotIcon && this._thirdSpinBlock_2.getComponent(SlotMachineStateSystem).slotIcon == this._fourthSpinBlock3.getComponent(SlotMachineStateSystem).slotIcon) {
-                won = true;
+                this._won = true;
+                playWinningSound();
+                this._secondSpinBlock_1.getComponent(Material).emissiveColor = Color3.Green();
+                this._thirdSpinBlock_2.getComponent(Material).emissiveColor = Color3.Green();
+                this._fourthSpinBlock3.getComponent(Material).emissiveColor = Color3.Green();
+
+                factTxt.visible  = true;
+
+                delayTimer.functionCall = () => {
+                    this._secondSpinBlock_1.getComponent(Material).emissiveColor = null;
+                    this._thirdSpinBlock_2.getComponent(Material).emissiveColor = null;
+                    this._fourthSpinBlock3.getComponent(Material).emissiveColor = null;
+                    factTxt.visible  = false;
+                    this._won = false;
+                }
+
+                delayTimer.start = true;
+
                 this.addCredits(100);
             }
             if (this._fourthSpinBlock1.getComponent(SlotMachineStateSystem).slotIcon == this._thirdSpinBlock_2.getComponent(SlotMachineStateSystem).slotIcon && this._thirdSpinBlock_2.getComponent(SlotMachineStateSystem).slotIcon == this._secondSpinBlock_3.getComponent(SlotMachineStateSystem).slotIcon) {
-                won = true;
+                this._won = true;
+                playWinningSound();
+                this._fourthSpinBlock1.getComponent(Material).emissiveColor = Color3.Green();
+                this._thirdSpinBlock_2.getComponent(Material).emissiveColor = Color3.Green();
+                this._secondSpinBlock_3.getComponent(Material).emissiveColor = Color3.Green();
+                factTxt.visible  = true;
+
+                delayTimer.functionCall = () => {
+                    this._fourthSpinBlock1.getComponent(Material).emissiveColor = null;
+                    this._thirdSpinBlock_2.getComponent(Material).emissiveColor = null;
+                    this._secondSpinBlock_3.getComponent(Material).emissiveColor = null;
+                    factTxt.visible  = false;
+                    this._won = false;
+                }
+
+                delayTimer.start = true;
+
                 this.addCredits(100);
             }
 
-            if (won) {
-                const sound = new Entity()
-                // Create AudioClip object, holding sounds file
-                const clip = new AudioClip('sounds/winningSound.mp3')
-                // Create AudioSource component, referencing `clip`
-                const source = new AudioSource(clip)
-
-                // Add AudioSource component to entity
-                sound.addComponent(source)
-                engine.addEntity(sound);
-
-                // Play sound
-                source.playing = true
-
-
-            }
+            this._gameStarted = false;
         })
 
+         function playWinningSound() {
+            const sound = new Entity()
+            // Create AudioClip object, holding sounds file
+            const clip = new AudioClip('sounds/winningSound.mp3')
+            // Create AudioSource component, referencing `clip`
+            const source = new AudioSource(clip)
+            sound.addComponent(new Transform({position: new Vector3(10, 1, 13)}))
+            // Add AudioSource component to entity
+            sound.addComponent(source)
+            engine.addEntity(sound);
+
+            // Play sound
+            source.playing = true
+        }
+
     }
+
+
+
     _firstSpinBlock_1 = new Entity();
     _secondSpinBlock_1 = new Entity();
     _thirdSpinBlock_1 = new Entity();

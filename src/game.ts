@@ -31,19 +31,19 @@ roofTexture.microSurface = 0.8
 // create canvas
 const canvas = new UICanvas()
 // create container inside canvas
-const rect = new UIContainerRect(canvas)
+export const rect = new UIContainerRect(canvas)
 rect.adaptHeight = true
 rect.adaptWidth = true
 rect.hAlign = 'left'
 rect.vAlign = 'top'
 rect.opacity = 0.8
 
-const factTxt = new UIText(rect)
+export const factTxt = new UIText(rect)
 factTxt.outlineColor = new Color4(0.7, 1, 0.8, 1)
 factTxt.value = 'WELCOME to the Tivoli Casino World, purchase mana to start playing!'
 factTxt.fontSize = 22
 factTxt.width = 500
-factTxt.height = 205
+factTxt.height = 800
 factTxt.positionX = 455
 factTxt.positionY = 0
 factTxt.color = new Color4(0.7, 1, 0.8, 1)
@@ -181,15 +181,44 @@ engine.addEntity(flower_01_2)
 
 const plantPot_01 = new Entity()
 plantPot_01.setParent(scene)
-const gltfShape_3 = new GLTFShape('models/PlantPot_01/PlantPot_01.glb')
-plantPot_01.addComponentOrReplace(gltfShape_3)
-const transform_5 = new Transform({
-    position: new Vector3(5, 0, 9),
+plantPot_01.addComponentOrReplace(new GLTFShape('models/PlantPot_01/PlantPot_01.glb'))
+plantPot_01.addComponentOrReplace(new Transform({
+    position: new Vector3(12, 0, 13),
     rotation: new Quaternion(0, 0, 0, 1),
     scale: new Vector3(1, 1, 1)
-})
-plantPot_01.addComponentOrReplace(transform_5)
+}))
 engine.addEntity(plantPot_01)
+
+const plantPot_01 = new Entity()
+plantPot_01.setParent(scene)
+plantPot_01.addComponentOrReplace(new GLTFShape('models/PlantPot_01/PlantPot_01.glb'))
+plantPot_01.addComponentOrReplace(new Transform({
+    position: new Vector3(12, 0, 3),
+    rotation: new Quaternion(0, 0, 0, 1),
+    scale: new Vector3(1, 1, 1)
+}))
+engine.addEntity(plantPot_01)
+
+const plantPot_01 = new Entity()
+plantPot_01.setParent(scene)
+plantPot_01.addComponentOrReplace(new GLTFShape('models/PlantPot_01/PlantPot_01.glb'))
+plantPot_01.addComponentOrReplace(new Transform({
+    position: new Vector3(4, 0, 13),
+    rotation: new Quaternion(0, 0, 0, 1),
+    scale: new Vector3(1, 1, 1)
+}))
+engine.addEntity(plantPot_01)
+
+const plantPot_01 = new Entity()
+plantPot_01.setParent(scene)
+plantPot_01.addComponentOrReplace(new GLTFShape('models/PlantPot_01/PlantPot_01.glb'))
+plantPot_01.addComponentOrReplace(new Transform({
+    position: new Vector3(4, 0, 5),
+    rotation: new Quaternion(0, 0, 0, 1),
+    scale: new Vector3(1, 1, 1)
+}))
+engine.addEntity(plantPot_01)
+
 
 const sign_03 = new Entity()
 sign_03.setParent(scene)
@@ -317,7 +346,9 @@ engine.addEntity(door);
 // input.subscribe("BUTTON_DOWN", ActionButton.POINTER, false, e => {
 
 var startGameEvent = new OnPointerDown(e => {
-
+    if (slotMachine.won() || slotMachine.gameStarted()) {
+        return;
+    }
     slotMachine.startGame();
 
     events.addListener(onRoundFinishEvent, null, () => {
@@ -332,7 +363,7 @@ var startGameEvent = new OnPointerDown(e => {
 
         // Add AudioSource component to entity
         sound.addComponent(source)
-
+        sound.addComponent(new Transform({position: new Vector3(10, 1, 8)}))
         engine.addEntity(sound);
 
 
@@ -494,7 +525,7 @@ var startGameEvent4 = new OnPointerDown(e => {
 
         // Add AudioSource component to entity
         sound.addComponent(source)
-
+        sound.addComponent(new Transform({position: new Vector3(10, 1, 8)}))
         engine.addEntity(sound);
 
 
@@ -506,12 +537,12 @@ var startGameEvent4 = new OnPointerDown(e => {
 
 slotMachine._backPlane.addComponentOrReplace(startGameEvent);
 button.addComponentOrReplace(startGameEvent);
-
-slotMachine2._backPlane.addComponentOrReplace(startGameEvent2);
-button2.addComponentOrReplace(startGameEvent2);
-
-slotMachine3._backPlane.addComponentOrReplace(startGameEvent3);
-button3.addComponentOrReplace(startGameEvent3);
-
-slotMachine4._backPlane.addComponentOrReplace(startGameEvent4);
-button4.addComponentOrReplace(startGameEvent4);
+//
+// slotMachine2._backPlane.addComponentOrReplace(startGameEvent2);
+// button2.addComponentOrReplace(startGameEvent2);
+//
+// slotMachine3._backPlane.addComponentOrReplace(startGameEvent3);
+// button3.addComponentOrReplace(startGameEvent3);
+//
+// slotMachine4._backPlane.addComponentOrReplace(startGameEvent4);
+// button4.addComponentOrReplace(startGameEvent4);

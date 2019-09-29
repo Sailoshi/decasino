@@ -29,6 +29,7 @@ export function getMaterialInstance(material: SpinTexture): Material {
     result.roughness = 0.8
     result.microSurface = 0.8
     result.specularIntensity = 0.7
+    result.emissiveIntensity = 0.8;
 
     switch(material) {
         case SpinTexture.Tiger: {
@@ -39,6 +40,7 @@ export function getMaterialInstance(material: SpinTexture): Material {
         case SpinTexture.Cherry: {
             result.albedoTexture = cherryTexture;
             result.alphaTexture = cherryTexture;
+
             break;
         }
         case SpinTexture.Seven: {

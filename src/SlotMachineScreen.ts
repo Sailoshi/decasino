@@ -22,6 +22,14 @@ export class SlotMachine {
 
     private _spinningBlocks: SpinBlock;
 
+    public won(): boolean {
+        return this._spinningBlocks._won;
+    }
+
+    public gameStarted(): boolean {
+        return this._spinningBlocks._gameStarted;
+    }
+
     constructor(position: Vector3 = new Vector3(8, 1, 8), scale: Vector3 = new Vector3(3, 3, 0.06), rotation: Quaternion = new Quaternion(0, 90,0,-45)) {
 
         this._metalTexture  = new Material();
@@ -30,7 +38,7 @@ export class SlotMachine {
         this._metalTexture.metallic = 0.8
         this._metalTexture.roughness = 0.4
         this._metalTexture.microSurface = 0.8
-        this._metalTexture.specularIntensity = 0.7
+        this._metalTexture.specularIntensity = 0.9
 
         const backPlaneMaterial  = new Material();
         backPlaneMaterial.albedoColor = Color3.Red();
