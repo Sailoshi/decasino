@@ -92,7 +92,42 @@ const myText = new TextShape("Mana:")
 myText.fontSize = 2
 myText.color = Color3.White()
 
+const myText2 = new TextShape("Mana:  0")
+myText2.fontSize = 2
+myText2.color = Color3.White()
+
+
 let textEntity = new Entity();
+textEntity.addComponentOrReplace(new Transform({
+    position: new Vector3(14.64, 1.3, 13.5),
+    rotation: new Quaternion(0, 1, 0, 1),
+    scale: new Vector3(0.2, 0.2, 0.2)}));
+textEntity.addComponentOrReplace(myText);
+engine.addEntity(textEntity)
+
+let textEntity2 = new Entity();
+textEntity2.addComponentOrReplace(new Transform({
+    position: new Vector3(14.64, 1.3, 10.5),
+    rotation: new Quaternion(0, 1, 0, 1),
+    scale: new Vector3(0.2, 0.2, 0.2)}));
+textEntity2.addComponentOrReplace(myText2);
+engine.addEntity(textEntity2)
+
+let textEntity3 = new Entity();
+textEntity3.addComponentOrReplace(new Transform({
+    position: new Vector3(14.64, 1.3, 7.5),
+    rotation: new Quaternion(0, 1, 0, 1),
+    scale: new Vector3(0.2, 0.2, 0.2)}));
+textEntity3.addComponentOrReplace(myText2);
+engine.addEntity(textEntity3)
+
+let textEntity3 = new Entity();
+textEntity3.addComponentOrReplace(new Transform({
+    position: new Vector3(14.64, 1.3, 4.5),
+    rotation: new Quaternion(0, 1, 0, 1),
+    scale: new Vector3(0.2, 0.2, 0.2)}));
+textEntity3.addComponentOrReplace(myText2);
+engine.addEntity(textEntity3)
 
 const button = new Entity()
 button.addComponent(new SphereShape())
@@ -103,8 +138,20 @@ button.addComponentOrReplace(new Transform({
 button.addComponentOrReplace(new Material()).albedoColor = Color3.Red();
 engine.addEntity(button);
 
+
+const cashSound = new Entity()
+// Create AudioClip object, holding sounds file
+const clip = new AudioClip('sounds/cashSound.wav')
+// Create AudioSource component, referencing `clip`
+export const cashSoundSource = new AudioSource(clip)
+cashSound.addComponent(new Transform({position: new Vector3(10, 1, 13)}))
+// Add AudioSource component to entity
+cashSound.addComponent(cashSoundSource)
+engine.addEntity(cashSound);
+
 manaPurchaseBlock.addComponentOrReplace(
     new OnPointerDown(e => {
+        cashSoundSource.playOnce();
         slotMachine.addCredits(1000);
         factTxt.visible = false;
     }));
@@ -135,13 +182,6 @@ button4.addComponentOrReplace(new Transform({
     scale: new Vector3(0.05, 0.05, 0.05)}));
 button4.addComponentOrReplace(new Material()).albedoColor = Color3.Red();
 engine.addEntity(button4);
-
-textEntity.addComponentOrReplace(new Transform({
-    position: new Vector3(14.64, 1.3, 13.5),
-    rotation: new Quaternion(0, 1, 0, 1),
-    scale: new Vector3(0.2, 0.2, 0.2)}));
-textEntity.addComponentOrReplace(myText);
-engine.addEntity(textEntity)
 
 
 const floorBasePebbles_01 = new Entity()
@@ -179,45 +219,45 @@ const transform_4 = new Transform({
 flower_01_2.addComponentOrReplace(transform_4)
 engine.addEntity(flower_01_2)
 
-const plantPot_01 = new Entity()
-plantPot_01.setParent(scene)
-plantPot_01.addComponentOrReplace(new GLTFShape('models/PlantPot_01/PlantPot_01.glb'))
-plantPot_01.addComponentOrReplace(new Transform({
+const plantPot_02 = new Entity()
+plantPot_02.setParent(scene)
+plantPot_02.addComponentOrReplace(new GLTFShape('models/PlantPot_01/PlantPot_01.glb'))
+plantPot_02.addComponentOrReplace(new Transform({
     position: new Vector3(12, 0, 13),
     rotation: new Quaternion(0, 0, 0, 1),
     scale: new Vector3(1, 1, 1)
 }))
-engine.addEntity(plantPot_01)
+engine.addEntity(plantPot_02)
 
-const plantPot_01 = new Entity()
-plantPot_01.setParent(scene)
-plantPot_01.addComponentOrReplace(new GLTFShape('models/PlantPot_01/PlantPot_01.glb'))
-plantPot_01.addComponentOrReplace(new Transform({
+const plantPot_03 = new Entity()
+plantPot_03.setParent(scene)
+plantPot_03.addComponentOrReplace(new GLTFShape('models/PlantPot_01/PlantPot_01.glb'))
+plantPot_03.addComponentOrReplace(new Transform({
     position: new Vector3(12, 0, 3),
     rotation: new Quaternion(0, 0, 0, 1),
     scale: new Vector3(1, 1, 1)
 }))
-engine.addEntity(plantPot_01)
+engine.addEntity(plantPot_03)
 
-const plantPot_01 = new Entity()
-plantPot_01.setParent(scene)
-plantPot_01.addComponentOrReplace(new GLTFShape('models/PlantPot_01/PlantPot_01.glb'))
-plantPot_01.addComponentOrReplace(new Transform({
+const plantPot_04 = new Entity()
+plantPot_04.setParent(scene)
+plantPot_04.addComponentOrReplace(new GLTFShape('models/PlantPot_01/PlantPot_01.glb'))
+plantPot_04.addComponentOrReplace(new Transform({
     position: new Vector3(4, 0, 13),
     rotation: new Quaternion(0, 0, 0, 1),
     scale: new Vector3(1, 1, 1)
 }))
-engine.addEntity(plantPot_01)
+engine.addEntity(plantPot_04)
 
-const plantPot_01 = new Entity()
-plantPot_01.setParent(scene)
-plantPot_01.addComponentOrReplace(new GLTFShape('models/PlantPot_01/PlantPot_01.glb'))
-plantPot_01.addComponentOrReplace(new Transform({
-    position: new Vector3(4, 0, 5),
+const plantPot_05 = new Entity()
+plantPot_05.setParent(scene)
+plantPot_05.addComponentOrReplace(new GLTFShape('models/PlantPot_01/PlantPot_01.glb'))
+plantPot_05.addComponentOrReplace(new Transform({
+    position: new Vector3(4, 0, 3),
     rotation: new Quaternion(0, 0, 0, 1),
     scale: new Vector3(1, 1, 1)
 }))
-engine.addEntity(plantPot_01)
+engine.addEntity(plantPot_05)
 
 
 const sign_03 = new Entity()
@@ -308,17 +348,92 @@ doorPivot.addComponent(new Transform({
     rotation: closedPos
 }))
 
+let casinoMusicOn = false;
+
 //toggle behavior for door
+
+const winningSound = new Entity()
+// Create AudioClip object, holding sounds file
+const clip = new AudioClip('sounds/winningSound.mp3')
+// Create AudioSource component, referencing `clip`
+export const winningSoundSource = new AudioSource(clip)
+winningSound.addComponent(new Transform({position: new Vector3(10, 1, 13)}))
+// Add AudioSource component to entity
+winningSound.addComponent(winningSoundSource)
+engine.addEntity(winningSound);
+
+const sound = new Entity()
+const sound2 = new Entity()
+// Create AudioClip object, holding sounds file
+const clip = new AudioClip('sounds/startSound.wav')
+const clip2 = new AudioClip('sounds/spinningSound.mp3')
+// Create AudioSource component, referencing `clip`
+export const source = new AudioSource(clip)
+export const source2 = new AudioSource(clip2)
+
+// Add AudioSource component to entity
+sound.addComponent(source)
+sound.addComponent(new Transform({position: new Vector3(10, 1, 8)}))
+sound2.addComponent(source2)
+sound2.addComponent(new Transform({position: new Vector3(10, 1, 8)}))
+engine.addEntity(sound);
+engine.addEntity(sound2);
+
+
+
+const casinoMusic = new Entity()
+// Create AudioClip object, holding sounds file
+const clip = new AudioClip('sounds/casinoBackgroundMusic.mp3')
+// Create AudioSource component, referencing `clip`
+const casinoSource = new AudioSource(clip)
+// Add AudioSource component to entity
+casinoMusic.addComponent(casinoSource)
+casinoMusic.addComponent(new Transform({position: new Vector3(2, 2, 6)}))
+engine.addEntity(casinoMusic);
+
+const openDoorSound = new Entity()
+// Create AudioClip object, holding sounds file
+const clip = new AudioClip('sounds/open_door_1.mp3')
+// Create AudioSource component, referencing `clip`
+const doorSoundSource = new AudioSource(clip)
+// Add AudioSource component to entity
+openDoorSound.addComponent(doorSoundSource)
+openDoorSound.addComponent(new Transform({position: new Vector3(3, 1, 7)}))
+engine.addEntity(openDoorSound);
+
+const closeDoorSound = new Entity()
+// Create AudioClip object, holding sounds file
+const clip = new AudioClip('sounds/close_door_1.mp3')
+// Create AudioSource component, referencing `clip`
+const doorSoundCloseSource = new AudioSource(clip)
+// Add AudioSource component to entity
+closeDoorSound.addComponent(doorSoundCloseSource)
+closeDoorSound.addComponent(new Transform({position: new Vector3(3, 1, 7)}))
+engine.addEntity(closeDoorSound);
+
     door.addComponent(new utils.ToggleComponent(utils.ToggleState.Off, value =>{
         if (value == utils.ToggleState.On){
             doorPivot.addComponentOrReplace(
                 new utils.RotateTransformComponent(doorPivot.getComponent(Transform).rotation, openPos, 0.5)
             )
+            if (!casinoMusicOn) {
+                casinoMusicOn = true;
+                // Play sound
+                casinoSource.playOnce();
+            }
+
+            // Play sound
+            doorSoundSource.playOnce();
         }
         else{
             doorPivot.addComponentOrReplace(
                 new utils.RotateTransformComponent(doorPivot.getComponent(Transform).rotation, closedPos, 0.5)
             )
+
+            engine.addEntity(closeDoorSound);
+
+            // Play sound
+            doorSoundCloseSource.playOnce();
         }
     }))
 
@@ -368,7 +483,7 @@ var startGameEvent = new OnPointerDown(e => {
 
 
         // Play sound
-        source.playing = true
+        source.playOnce();
 
     })
 
@@ -389,7 +504,7 @@ var startGameEvent = new OnPointerDown(e => {
 
 
         // Play sound
-        source.playing = true
+        source.playOnce();
 
     })
 })
@@ -415,7 +530,7 @@ var startGameEvent2 = new OnPointerDown(e => {
 
 
         // Play sound
-        source.playing = true
+        source.playOnce();
 
     })
 
@@ -436,7 +551,7 @@ var startGameEvent2 = new OnPointerDown(e => {
 
 
         // Play sound
-        source.playing = true
+        source.playOnce();
 
     })
 });
@@ -462,7 +577,7 @@ var startGameEvent3 = new OnPointerDown(e => {
 
 
         // Play sound
-        source.playing = true
+        source.playOnce();
 
     })
 
@@ -483,7 +598,7 @@ var startGameEvent3 = new OnPointerDown(e => {
 
 
         // Play sound
-        source.playing = true
+        source.playOnce();
 
     })
 });
@@ -509,7 +624,7 @@ var startGameEvent4 = new OnPointerDown(e => {
 
 
         // Play sound
-        source.playing = true
+        source.playOnce();
 
     })
 
@@ -530,7 +645,7 @@ var startGameEvent4 = new OnPointerDown(e => {
 
 
         // Play sound
-        source.playing = true
+        source.playOnce()
 
     })
 });

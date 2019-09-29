@@ -1,6 +1,6 @@
 import {events, onSpinBlockFinishEvent, SlotMachineStateSystem, SlotMachineSystem} from "./SlotMachineStateSystem";
 import {getMaterialInstance, SpinTexture} from "./SlotMaterials";
-import {rect} from "./game";
+import {cashSoundSource, rect, source, source2, winningSoundSource} from "./game";
 
 @EventConstructor()
 export class onRoundFinishEvent {
@@ -15,7 +15,7 @@ export class TimeSystem implements ISystem {
         if (this.start) {
             this.timeDelayed += dt;
 
-            if (this.timeDelayed > 3.5) {
+            if (this.timeDelayed > 3) {
                 this.timeDelayed = 0;
                 this.start = false;
                 this.functionCall();
@@ -88,26 +88,11 @@ export class SpinBlock extends Entity {
 
         this._gameStarted = true;
         if (!this._firstSpinBlock_2.getComponent(SlotMachineStateSystem).startGame) {
-            const sound = new Entity()
-            const sound2 = new Entity()
-            // Create AudioClip object, holding sounds file
-            const clip = new AudioClip('sounds/startSound.wav')
-            const clip2 = new AudioClip('sounds/spinningSound.mp3')
-            // Create AudioSource component, referencing `clip`
-            const source = new AudioSource(clip)
-            const source2 = new AudioSource(clip2)
 
-            // Add AudioSource component to entity
-            sound.addComponent(source)
-            sound.addComponent(new Transform({position: new Vector3(10, 1, 8)}))
-            sound2.addComponent(source2)
-            sound2.addComponent(new Transform({position: new Vector3(10, 1, 8)}))
-            engine.addEntity(sound);
-            engine.addEntity(sound2);
 
             // Play sound
-            source.playing = true
-            source2.playing = true
+            source.playOnce();
+            source2.playOnce();
             if (this._creditsEntity) {
                 this._currentCredits -= 50;
                 this._creditsEntity.getComponent(TextShape).value = this._currentCredits;
@@ -140,8 +125,8 @@ export class SpinBlock extends Entity {
         factTxt.hTextAlign = "center";
         factTxt.height = 800
         factTxt.outlineColor = Color4.Green();
-        factTxt.positionX = 500
-        factTxt.positionY = 50
+        factTxt.positionX = 800
+        factTxt.positionY = 300
         factTxt.color = new Color4(0.7, 1, 0.8, 1)
         factTxt.textWrapping = true
 
@@ -160,8 +145,7 @@ export class SpinBlock extends Entity {
         engine.addSystem(delayTimer)
 
         events.addListener(onSpinBlockFinishEvent, null, () => {
-            events.fireEvent(new onRoundFinishEvent())
-
+            events.fireEvent( new onRoundFinishEvent())
 
             if (this._secondSpinBlock_1.getComponent(SlotMachineStateSystem).slotIcon == this._secondSpinBlock_2.getComponent(SlotMachineStateSystem).slotIcon && this._secondSpinBlock_2.getComponent(SlotMachineStateSystem).slotIcon == this._secondSpinBlock_3.getComponent(SlotMachineStateSystem).slotIcon) {
                 this._won = true;
@@ -169,6 +153,21 @@ export class SpinBlock extends Entity {
                 this._secondSpinBlock_1.getComponent(Material).emissiveColor = Color3.Green();
                 this._secondSpinBlock_2.getComponent(Material).emissiveColor = Color3.Green();
                 this._secondSpinBlock_3.getComponent(Material).emissiveColor = Color3.Green();
+                let credits = 100;
+                if (this._secondSpinBlock_1.getComponent(SlotMachineStateSystem).slotIcon == SpinTexture.Bar) {
+                    credits = 250;
+                }
+                if (this._secondSpinBlock_1.getComponent(SlotMachineStateSystem).slotIcon == SpinTexture.Tiger) {
+                    credits = 500;
+                }
+                if (this._secondSpinBlock_1.getComponent(SlotMachineStateSystem).slotIcon == SpinTexture.Seven) {
+                    credits = 777;
+                }
+                if (this._secondSpinBlock_1.getComponent(SlotMachineStateSystem).slotIcon == SpinTexture.Diamond) {
+                    credits = 1000;
+                }
+
+                factTxt.value = "Yeah, you have won " + credits + " Mana";
                 factTxt.visible  = true;
 
                 delayTimer.functionCall = () => {
@@ -177,11 +176,12 @@ export class SpinBlock extends Entity {
                     this._secondSpinBlock_3.getComponent(Material).emissiveColor = null;
                     factTxt.visible  = false;
                     this._won = false;
+                    factTxt.value = "100";
                 }
 
                 delayTimer.start = true;
 
-                this.addCredits(100);
+                this.addCredits(credits);
             }
 
             if (this._thirdSpinBlock_1.getComponent(SlotMachineStateSystem).slotIcon == this._thirdSpinBlock_2.getComponent(SlotMachineStateSystem).slotIcon && this._thirdSpinBlock_2.getComponent(SlotMachineStateSystem).slotIcon == this._thirdSpinBlock_3.getComponent(SlotMachineStateSystem).slotIcon) {
@@ -190,6 +190,23 @@ export class SpinBlock extends Entity {
                 this._thirdSpinBlock_1.getComponent(Material).emissiveColor = Color3.Green();
                 this._thirdSpinBlock_2.getComponent(Material).emissiveColor = Color3.Green();
                 this._thirdSpinBlock_3.getComponent(Material).emissiveColor = Color3.Green();
+
+                let credits = 100;
+
+                if (this._secondSpinBlock_1.getComponent(SlotMachineStateSystem).slotIcon == SpinTexture.Bar) {
+                    credits = 250;
+                }
+                if (this._secondSpinBlock_1.getComponent(SlotMachineStateSystem).slotIcon == SpinTexture.Tiger) {
+                    credits = 500;
+                }
+                if (this._secondSpinBlock_1.getComponent(SlotMachineStateSystem).slotIcon == SpinTexture.Seven) {
+                    credits = 777;
+                }
+                if (this._secondSpinBlock_1.getComponent(SlotMachineStateSystem).slotIcon == SpinTexture.Diamond) {
+                    credits = 1000;
+                }
+
+                factTxt.value = "Yeah, you have won " + credits + " Mana";
                 factTxt.visible  = true;
 
                 delayTimer.functionCall = () => {
@@ -198,11 +215,12 @@ export class SpinBlock extends Entity {
                     this._thirdSpinBlock_3.getComponent(Material).emissiveColor = null;
                     factTxt.visible  = false;
                     this._won = false;
+                    factTxt.value = "100";
                 }
 
                 delayTimer.start = true;
 
-                this.addCredits(100);
+                this.addCredits(credits);
             }
             if (this._fourthSpinBlock1.getComponent(SlotMachineStateSystem).slotIcon == this._fourthSpinBlock2.getComponent(SlotMachineStateSystem).slotIcon && this._fourthSpinBlock2.getComponent(SlotMachineStateSystem).slotIcon == this._fourthSpinBlock3.getComponent(SlotMachineStateSystem).slotIcon) {
                 this._won = true;
@@ -210,6 +228,23 @@ export class SpinBlock extends Entity {
                 this._fourthSpinBlock1.getComponent(Material).emissiveColor = Color3.Green();
                 this._fourthSpinBlock2.getComponent(Material).emissiveColor = Color3.Green();
                 this._fourthSpinBlock3.getComponent(Material).emissiveColor = Color3.Green();
+
+                let credits = 100;
+
+                if (this._fourthSpinBlock1.getComponent(SlotMachineStateSystem).slotIcon == SpinTexture.Bar) {
+                    credits = 250;
+                }
+                if (this._fourthSpinBlock1.getComponent(SlotMachineStateSystem).slotIcon == SpinTexture.Tiger) {
+                    credits = 500;
+                }
+                if (this._fourthSpinBlock1.getComponent(SlotMachineStateSystem).slotIcon == SpinTexture.Seven) {
+                    credits = 777;
+                }
+                if (this._fourthSpinBlock1.getComponent(SlotMachineStateSystem).slotIcon == SpinTexture.Diamond) {
+                    credits = 1000;
+                }
+
+                factTxt.value = "Yeah, you have won " + credits + " Mana";
                 factTxt.visible  = true;
 
                 delayTimer.functionCall = () => {
@@ -218,11 +253,12 @@ export class SpinBlock extends Entity {
                     this._fourthSpinBlock3.getComponent(Material).emissiveColor = null;
                     factTxt.visible  = false;
                     this._won = false;
+                    factTxt.value = "100";
                 }
 
                 delayTimer.start = true;
 
-                this.addCredits(100);
+                this.addCredits(credits);
             }
             if (this._secondSpinBlock_1.getComponent(SlotMachineStateSystem).slotIcon == this._thirdSpinBlock_2.getComponent(SlotMachineStateSystem).slotIcon && this._thirdSpinBlock_2.getComponent(SlotMachineStateSystem).slotIcon == this._fourthSpinBlock3.getComponent(SlotMachineStateSystem).slotIcon) {
                 this._won = true;
@@ -231,6 +267,22 @@ export class SpinBlock extends Entity {
                 this._thirdSpinBlock_2.getComponent(Material).emissiveColor = Color3.Green();
                 this._fourthSpinBlock3.getComponent(Material).emissiveColor = Color3.Green();
 
+                let credits = 100;
+
+                if (this._secondSpinBlock_1.getComponent(SlotMachineStateSystem).slotIcon == SpinTexture.Bar) {
+                    credits = 250;
+                }
+                if (this._secondSpinBlock_1.getComponent(SlotMachineStateSystem).slotIcon == SpinTexture.Tiger) {
+                    credits = 500;
+                }
+                if (this._secondSpinBlock_1.getComponent(SlotMachineStateSystem).slotIcon == SpinTexture.Seven) {
+                    credits = 777;
+                }
+                if (this._secondSpinBlock_1.getComponent(SlotMachineStateSystem).slotIcon == SpinTexture.Diamond) {
+                    credits = 1000;
+                }
+
+                factTxt.value = "Yeah, you have won " + credits + " Mana";
                 factTxt.visible  = true;
 
                 delayTimer.functionCall = () => {
@@ -239,11 +291,12 @@ export class SpinBlock extends Entity {
                     this._fourthSpinBlock3.getComponent(Material).emissiveColor = null;
                     factTxt.visible  = false;
                     this._won = false;
+                    factTxt.value = "100";
                 }
 
                 delayTimer.start = true;
 
-                this.addCredits(100);
+                this.addCredits(credits);
             }
             if (this._fourthSpinBlock1.getComponent(SlotMachineStateSystem).slotIcon == this._thirdSpinBlock_2.getComponent(SlotMachineStateSystem).slotIcon && this._thirdSpinBlock_2.getComponent(SlotMachineStateSystem).slotIcon == this._secondSpinBlock_3.getComponent(SlotMachineStateSystem).slotIcon) {
                 this._won = true;
@@ -251,6 +304,27 @@ export class SpinBlock extends Entity {
                 this._fourthSpinBlock1.getComponent(Material).emissiveColor = Color3.Green();
                 this._thirdSpinBlock_2.getComponent(Material).emissiveColor = Color3.Green();
                 this._secondSpinBlock_3.getComponent(Material).emissiveColor = Color3.Green();
+
+                let credits = 100;
+
+                if (this._fourthSpinBlock1.getComponent(SlotMachineStateSystem).slotIcon == SpinTexture.Bar) {
+                    credits = 250;
+                    factTxt.value = "250";
+                }
+                if (this._fourthSpinBlock1.getComponent(SlotMachineStateSystem).slotIcon == SpinTexture.Tiger) {
+                    credits = 500;
+                    factTxt.value = "500";
+                }
+                if (this._fourthSpinBlock1.getComponent(SlotMachineStateSystem).slotIcon == SpinTexture.Seven) {
+                    credits = 777;
+                    factTxt.value = "777";
+                }
+                if (this._fourthSpinBlock1.getComponent(SlotMachineStateSystem).slotIcon == SpinTexture.Diamond) {
+                    credits = 1000;
+                    factTxt.value = "1000";
+                }
+
+                factTxt.value = "Yeah, you have won " + credits + " Mana";
                 factTxt.visible  = true;
 
                 delayTimer.functionCall = () => {
@@ -259,29 +333,21 @@ export class SpinBlock extends Entity {
                     this._secondSpinBlock_3.getComponent(Material).emissiveColor = null;
                     factTxt.visible  = false;
                     this._won = false;
+                    factTxt.value = "100";
                 }
 
                 delayTimer.start = true;
 
-                this.addCredits(100);
+                this.addCredits(credits);
             }
 
             this._gameStarted = false;
         })
 
          function playWinningSound() {
-            const sound = new Entity()
-            // Create AudioClip object, holding sounds file
-            const clip = new AudioClip('sounds/winningSound.mp3')
-            // Create AudioSource component, referencing `clip`
-            const source = new AudioSource(clip)
-            sound.addComponent(new Transform({position: new Vector3(10, 1, 13)}))
-            // Add AudioSource component to entity
-            sound.addComponent(source)
-            engine.addEntity(sound);
 
-            // Play sound
-            source.playing = true
+             winningSoundSource.playOnce()
+
         }
 
     }
@@ -303,6 +369,27 @@ export class SpinBlock extends Entity {
 
     private roundFinishCallback(): void {
         events.fireEvent(new onSpinBlockFinishEvent());
+    };
+
+    private stopSoundCallback(): void {
+
+        const stopSound = new Entity()
+
+        // Create AudioClip object, holding sounds file
+        const clip = new AudioClip('sounds/stopSound.mp3')
+
+        // Create AudioSource component, referencing `clip`
+        const stopSoundSource = new AudioSource(clip)
+
+
+        // Add AudioSource component to entity
+        stopSound.addComponent(stopSoundSource)
+        stopSound.addComponent(new Transform({position: new Vector3(10, 1, 8)}))
+        engine.addEntity(stopSound);
+
+
+        // Play sound
+        stopSoundSource.playOnce();
     };
 
     constructor(slotMachineScreen: Entity) {
@@ -421,19 +508,19 @@ export class SpinBlock extends Entity {
         this._fourthSpinBlock3.setParent(slotMachineScreen)
 
         engine.addEntity(slotMachineScreen);
-        engine.addSystem(new SlotMachineSystem(this._firstSpinBlock_1));
-        engine.addSystem(new SlotMachineSystem(this._secondSpinBlock_1))
-        engine.addSystem(new SlotMachineSystem(this._thirdSpinBlock_1))
-        engine.addSystem(new SlotMachineSystem(this._fourthSpinBlock1, this.roundFinishCallback))
+        engine.addSystem(new SlotMachineSystem(this._firstSpinBlock_1, 3));
+        engine.addSystem(new SlotMachineSystem(this._secondSpinBlock_1, 3))
+        engine.addSystem(new SlotMachineSystem(this._thirdSpinBlock_1, 3))
+        engine.addSystem(new SlotMachineSystem(this._fourthSpinBlock1, 3, this.stopSoundCallback))
 
-        engine.addSystem(new SlotMachineSystem(this._firstSpinBlock_2))
-        engine.addSystem(new SlotMachineSystem(this._secondSpinBlock_2))
-        engine.addSystem(new SlotMachineSystem(this._thirdSpinBlock_2))
-        engine.addSystem(new SlotMachineSystem(this._fourthSpinBlock2))
+        engine.addSystem(new SlotMachineSystem(this._firstSpinBlock_2, 4))
+        engine.addSystem(new SlotMachineSystem(this._secondSpinBlock_2, 4))
+        engine.addSystem(new SlotMachineSystem(this._thirdSpinBlock_2, 4))
+        engine.addSystem(new SlotMachineSystem(this._fourthSpinBlock2, 4, this.stopSoundCallback))
 
-        engine.addSystem(new SlotMachineSystem(this._firstSpinBlock_3))
-        engine.addSystem(new SlotMachineSystem(this._secondSpinBlock_3))
-        engine.addSystem(new SlotMachineSystem(this._thirdSpinBlock_3))
-        engine.addSystem(new SlotMachineSystem(this._fourthSpinBlock3))
+        engine.addSystem(new SlotMachineSystem(this._firstSpinBlock_3, 5))
+        engine.addSystem(new SlotMachineSystem(this._secondSpinBlock_3, 5))
+        engine.addSystem(new SlotMachineSystem(this._thirdSpinBlock_3, 5))
+        engine.addSystem(new SlotMachineSystem(this._fourthSpinBlock3, 5, this.roundFinishCallback))
     }
 }

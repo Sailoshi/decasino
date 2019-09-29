@@ -25,7 +25,7 @@ export class SlotMachineSystem implements ISystem {
     private _material;
     private _onRoundFinishedCallback;
 
-    constructor(cubeComponent: Entity, onRoundFinishedCallback: () => void = null){
+    constructor(cubeComponent: Entity, rounds: number = 5, onRoundFinishedCallback: () => void = null){
         this._cube = cubeComponent
         this._startPosition = this._cube.getComponent(Transform).position;
         this._transform = this._cube.getComponent(Transform)
@@ -34,6 +34,7 @@ export class SlotMachineSystem implements ISystem {
         this._stopPosition = this._endPosition;
         this._maxMovement = this._rounds * 4 * this._transform.scale.y;
         this._onRoundFinishedCallback = onRoundFinishedCallback;
+        this._rounds = rounds;
     }
 
 
@@ -84,7 +85,7 @@ export class SlotMachineSystem implements ISystem {
                     let diff = Math.abs(this._transform.position.y - this._endPosition.y);
 
                     if (this._counter == this._rounds - 1) {
-                        let random = Math.floor(Math.random() * 6);
+                        let random = Math.floor(Math.random() * 9);
                         this._material.albedoTexture = materialsArray[random];
                         lerp.slotIcon = random
                     }
