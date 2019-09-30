@@ -93,7 +93,7 @@ export class SpinBlock extends Entity {
             // Play sound
             startSound.playOnce();
             spinningSound.playOnce();
-            if (this._creditsEntity) {
+            if (this._creditsEntity && this._currentCredits >= 50) {
                 this._currentCredits -= 50;
                 this._creditsEntity.getComponent(TextShape).value = this._currentCredits;
             }
@@ -170,17 +170,6 @@ export class SpinBlock extends Entity {
                 factTxt.value = "Yeah, you have won " + credits + " Mana";
                 factTxt.visible  = true;
 
-                delayTimer.functionCall = () => {
-                    this._secondSpinBlock_1.getComponent(Material).emissiveColor = null;
-                    this._secondSpinBlock_2.getComponent(Material).emissiveColor = null;
-                    this._secondSpinBlock_3.getComponent(Material).emissiveColor = null;
-                    factTxt.visible  = false;
-                    this._won = false;
-                    factTxt.value = "100";
-                }
-
-                delayTimer.start = true;
-
                 this.addCredits(credits);
             }
 
@@ -193,32 +182,21 @@ export class SpinBlock extends Entity {
 
                 let credits = 100;
 
-                if (this._secondSpinBlock_1.getComponent(SlotMachineStateSystem).slotIcon == SpinTexture.Bar) {
+                if (this._thirdSpinBlock_1.getComponent(SlotMachineStateSystem).slotIcon == SpinTexture.Bar) {
                     credits = 250;
                 }
-                if (this._secondSpinBlock_1.getComponent(SlotMachineStateSystem).slotIcon == SpinTexture.Tiger) {
+                if (this._thirdSpinBlock_1.getComponent(SlotMachineStateSystem).slotIcon == SpinTexture.Tiger) {
                     credits = 500;
                 }
-                if (this._secondSpinBlock_1.getComponent(SlotMachineStateSystem).slotIcon == SpinTexture.Seven) {
+                if (this._thirdSpinBlock_1.getComponent(SlotMachineStateSystem).slotIcon == SpinTexture.Seven) {
                     credits = 777;
                 }
-                if (this._secondSpinBlock_1.getComponent(SlotMachineStateSystem).slotIcon == SpinTexture.Diamond) {
+                if (this._thirdSpinBlock_1.getComponent(SlotMachineStateSystem).slotIcon == SpinTexture.Diamond) {
                     credits = 1000;
                 }
 
                 factTxt.value = "Yeah, you have won " + credits + " Mana";
                 factTxt.visible  = true;
-
-                delayTimer.functionCall = () => {
-                    this._thirdSpinBlock_1.getComponent(Material).emissiveColor = null;
-                    this._thirdSpinBlock_2.getComponent(Material).emissiveColor = null;
-                    this._thirdSpinBlock_3.getComponent(Material).emissiveColor = null;
-                    factTxt.visible  = false;
-                    this._won = false;
-                    factTxt.value = "100";
-                }
-
-                delayTimer.start = true;
 
                 this.addCredits(credits);
             }
@@ -247,17 +225,6 @@ export class SpinBlock extends Entity {
                 factTxt.value = "Yeah, you have won " + credits + " Mana";
                 factTxt.visible  = true;
 
-                delayTimer.functionCall = () => {
-                    this._fourthSpinBlock1.getComponent(Material).emissiveColor = null;
-                    this._fourthSpinBlock2.getComponent(Material).emissiveColor = null;
-                    this._fourthSpinBlock3.getComponent(Material).emissiveColor = null;
-                    factTxt.visible  = false;
-                    this._won = false;
-                    factTxt.value = "100";
-                }
-
-                delayTimer.start = true;
-
                 this.addCredits(credits);
             }
             if (this._secondSpinBlock_1.getComponent(SlotMachineStateSystem).slotIcon == this._thirdSpinBlock_2.getComponent(SlotMachineStateSystem).slotIcon && this._thirdSpinBlock_2.getComponent(SlotMachineStateSystem).slotIcon == this._fourthSpinBlock3.getComponent(SlotMachineStateSystem).slotIcon) {
@@ -284,17 +251,6 @@ export class SpinBlock extends Entity {
 
                 factTxt.value = "Yeah, you have won " + credits + " Mana";
                 factTxt.visible  = true;
-
-                delayTimer.functionCall = () => {
-                    this._secondSpinBlock_1.getComponent(Material).emissiveColor = null;
-                    this._thirdSpinBlock_2.getComponent(Material).emissiveColor = null;
-                    this._fourthSpinBlock3.getComponent(Material).emissiveColor = null;
-                    factTxt.visible  = false;
-                    this._won = false;
-                    factTxt.value = "100";
-                }
-
-                delayTimer.start = true;
 
                 this.addCredits(credits);
             }
@@ -327,18 +283,25 @@ export class SpinBlock extends Entity {
                 factTxt.value = "Yeah, you have won " + credits + " Mana";
                 factTxt.visible  = true;
 
+                this.addCredits(credits);
+            }
+            if (this._won) {
                 delayTimer.functionCall = () => {
-                    this._fourthSpinBlock1.getComponent(Material).emissiveColor = null;
-                    this._thirdSpinBlock_2.getComponent(Material).emissiveColor = null;
+                    this._secondSpinBlock_1.getComponent(Material).emissiveColor = null;
+                    this._secondSpinBlock_2.getComponent(Material).emissiveColor = null;
                     this._secondSpinBlock_3.getComponent(Material).emissiveColor = null;
+                    this._thirdSpinBlock_1.getComponent(Material).emissiveColor = null;
+                    this._thirdSpinBlock_2.getComponent(Material).emissiveColor = null;
+                    this._thirdSpinBlock_3.getComponent(Material).emissiveColor = null;
+                    this._fourthSpinBlock1.getComponent(Material).emissiveColor = null;
+                    this._fourthSpinBlock2.getComponent(Material).emissiveColor = null;
+                    this._fourthSpinBlock3.getComponent(Material).emissiveColor = null;
+
                     factTxt.visible  = false;
                     this._won = false;
                     factTxt.value = "100";
                 }
-
                 delayTimer.start = true;
-
-                this.addCredits(credits);
             }
 
             this._gameStarted = false;

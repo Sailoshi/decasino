@@ -23,13 +23,13 @@ engine.addEntity(stopSound);
 
 const  floorTexture  = new Material();
 floorTexture.albedoTexture = new Texture("materials/casinoFloor.png");
-floorTexture.alphaTexture = new Texture("materials/casinoFloor.png");
+floorTexture.alphaTexture = new Texture("materials/casinoFloorBump.png");
 floorTexture.roughness = 1
 floorTexture.microSurface = 0.8
 
 const  wallTexture  = new Material();
 wallTexture.albedoTexture = new Texture("materials/casinoWall.png");
-wallTexture.alphaTexture = new Texture("materials/casinoWall.png");
+wallTexture.bumpTexture = new Texture("materials/casinoWall.png");
 wallTexture.roughness = 1
 wallTexture.microSurface = 0.8
 
@@ -82,6 +82,15 @@ purchaseEntity.addComponentOrReplace(new Transform({
 purchaseEntity.addComponentOrReplace(purchaseText);
 
 engine.addEntity(purchaseEntity);
+
+var wallPicture = new Entity();
+wallPicture.addComponentOrReplace(new BoxShape())
+wallPicture.addComponentOrReplace(new Transform({position: new Vector3( 8, 2, 13.95), scale: new Vector3(3, 2, 0.01)}));
+const wallPictureMaterial = new Material();
+wallPictureMaterial.albedoTexture = new Texture("materials/jackpot.jpg");
+wallPicture.addComponentOrReplace(wallPictureMaterial);
+
+engine.addEntity(wallPicture);
 
 // let sunUITexture = new Texture("materials/1.png")
 // const sunImgScreen = new UIImage(rect, sunUITexture)
